@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 // Proxy for login endpoint
 app.post('/login', async (req, res) => {
     try {
-        const response = await fetch(`${REMOTE_API_URL}/login`, {
+        const response = await fetch(`${REMOTE_API_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ app.post('/login', async (req, res) => {
 // Proxy for registration endpoint
 app.post('/register', async (req, res) => {
     try {
-        const response = await fetch(`${REMOTE_API_URL}/register`, {
+        const response = await fetch(`${REMOTE_API_URL}/api/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -69,49 +69,6 @@ app.post('/register', async (req, res) => {
         console.error('Error proxying register request:', error);
         res.status(500).json({ message: 'Failed to connect to registration service' });
     }
-});
-
-// Fallback endpoints in case remote API is down
-// These will only be used if the proxy endpoints above fail
-
-// Fallback login (for testing when remote API is unavailable)
-app.post('/fallback/login', async (req, res) => {
-    const { email, password } = req.body;
-    
-    // Very basic test authentication - ONLY FOR DEVELOPMENT
-    if (email === 'test@example.com' && password === 'password123') {
-        res.status(200).json({
-            message: 'Login successful (FALLBACK MODE)',
-            token: 'test-token-123',
-            user: {
-                id: 1,
-                name: 'Test User',
-                email: 'test@example.com'
-            }
-        });
-    } else {
-        res.status(401).json({ message: 'Invalid credentials (FALLBACK MODE)' });
-    }
-});
-
-// Fallback register (for testing when remote API is unavailable)
-app.post('/fallback/register', async (req, res) => {
-    const { firstName, lastName, login, password } = req.body;
-    
-    // Basic validation
-    if (!firstName || !lastName || !login || !password) {
-        return res.status(400).json({ message: 'All fields are required (FALLBACK MODE)' });
-    }
-    
-    res.status(201).json({
-        message: 'Registration successful (FALLBACK MODE)',
-        token: 'test-token-' + Date.now(),
-        user: {
-            id: Date.now(),
-            name: `${firstName} ${lastName}`,
-            email: login
-        }
-    });
 });
 
 // Start the server
