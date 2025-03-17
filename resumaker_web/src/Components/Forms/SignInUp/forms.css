@@ -185,3 +185,102 @@
 .password-toggle-button:hover .password-icon {
   color: #334155;
 }
+
+
+
+/*---------------------------- Verification------------------ */
+
+
+.verification-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  padding: 24px;
+  text-align: center;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.verification-message {
+  margin: 0 0 16px;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #4b5563;
+}
+
+.verification-form {
+  width: 100%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* For the "complete" step */
+.verification-container .form-button {
+  margin-top: 16px;
+  max-width: 200px;
+}
+
+/* Make error and success messages more consistent */
+.form-error, .form-success {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.form-error {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #f87171;
+}
+
+.form-success {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+
+/* Resend Code Styles */
+.resend-code {
+  margin-top: 20px;
+  text-align: center;
+  width: 100%;
+}
+
+.resend-code p {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.resend-button {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  font-size: 0.9rem;
+  padding: 4px 8px;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.resend-button:hover {
+  color: #2563eb;
+}
+
+.resend-button:disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
