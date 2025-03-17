@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import eyeClosedIcon from '../../../assets/Icons/eyeClosed.svg';
+import eyeOpenIcon from '../../../assets/Icons/eyeOpen.svg';
 import './forms.css';
-
 export default function RegisterForm() {
   // Form state management
   const [formData, setFormData] = useState({
@@ -26,8 +27,10 @@ export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
 
+  // Password visibility state
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -113,11 +116,6 @@ export default function RegisterForm() {
       // Handle successful registration
       setSuccessMsg('Registration successful! You can now log in.');
       
-      // Optional: Store token if returned and auto-login
-      if (data.token) {
-        localStorage.setItem('token', data.token);
-        // Could redirect or update global auth state here
-      }
       
       // Reset form
       setFormData({
@@ -147,31 +145,34 @@ export default function RegisterForm() {
       {successMsg && <div className="form-success">{successMsg}</div>}
       
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label className="form-label" htmlFor="firstName">First Name</label>
-          <input 
-            type="text" 
-            id="firstName" 
-            className="form-input"
-            placeholder="Ex. John"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-          />
+        <div className="nameGroup">
+            <div className="form-group">
+              <label className="form-label" htmlFor="firstName">First Name</label>
+              <input 
+                type="text" 
+                id="firstName" 
+                className="form-input"
+                placeholder="Ex. John"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label" htmlFor="lastName">Last Name</label>
+              <input 
+                type="text" 
+                id="lastName" 
+                className="form-input"
+                placeholder="Ex. Doe"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+              />
+            </div>
         </div>
         
-        <div className="form-group">
-          <label className="form-label" htmlFor="lastName">Last Name</label>
-          <input 
-            type="text" 
-            id="lastName" 
-            className="form-input"
-            placeholder="Ex. Doe"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        
         
         <div className="form-group">
           <label className="form-label" htmlFor="email">Email</label>
@@ -204,9 +205,9 @@ export default function RegisterForm() {
               onClick={() => setShowPassword(prev => !prev)}
             >
               {showPassword ? (
-                <i className="password-icon hide-password">👁️‍🗨️</i>
+                <img className="password-icon hide-password" src={eyeClosedIcon}></img>
               ) : (
-                <i className="password-icon show-password">👁️</i>
+                <img className="password-icon show-password" src={eyeOpenIcon}></img>
               )}
             </button>
           </div>
@@ -244,19 +245,19 @@ export default function RegisterForm() {
               id="confirmPassword" 
               className="form-input"
               placeholder="Confirm password"
-              value={formData.password}
+              value={formData.confirmPassword}
               onChange={handleChange}
               required
             />
             <button 
               type="button"
               className="password-toggle-button"
-              onClick={() => setShowPassword(prev => !prev)}
+              onClick={() => setShowConfirmPassword(prev => !prev)}
             >
-              {showPassword ? (
-                <i className="password-icon hide-password">👁️‍🗨️</i>
+              {showConfirmPassword ? (
+                <img className="password-icon hide-password" src={eyeClosedIcon}></img>
               ) : (
-                <i className="password-icon show-password">👁️</i>
+                <img className="password-icon show-password" src={eyeOpenIcon}></img>
               )}
             </button>
           </div>

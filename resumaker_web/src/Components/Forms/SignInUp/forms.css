@@ -17,6 +17,12 @@
     margin-bottom: 16px;
   }
   
+  .nameGroup
+  {
+    display:flex;
+    flex-direction: row;
+    gap:0.5rem;
+  }
   .form-label {
     display: block;
     font-size: 0.875rem;
@@ -62,7 +68,6 @@
 .password-requirements {
   margin-top: 8px;
   padding: 10px;
-  background-color: grey;
   border: 1px solid #e2e8f0;
   border-radius: 4px;
 }

@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import eyeClosedIcon from '../../../assets/Icons/eyeClosed.svg';
+import eyeOpenIcon from '../../../assets/Icons/eyeOpen.svg';
 import './forms.css';
 
 export default function LoginForm() {
@@ -109,7 +111,7 @@ export default function LoginForm() {
               type={showPassword ? "text" : "password"} 
               id="password" 
               className="form-input"
-              placeholder="Create password"
+              placeholder="Enter password"
               value={formData.password}
               onChange={handleChange}
               required
@@ -120,9 +122,9 @@ export default function LoginForm() {
               onClick={() => setShowPassword(prev => !prev)}
             >
               {showPassword ? (
-                <i className="password-icon hide-password">👁️‍🗨️</i>
+                <img className="password-icon hide-password" src={eyeClosedIcon}></img>
               ) : (
-                <i className="password-icon show-password">👁️</i>
+                <img className="password-icon show-password" src={eyeOpenIcon}></img>
               )}
             </button>
           </div>
