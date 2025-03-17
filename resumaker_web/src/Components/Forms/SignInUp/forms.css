@@ -284,3 +284,49 @@
   color: #9ca3af;
   cursor: not-allowed;
 }
+
+
+
+
+
+/* ----------------------Forgot------------------------ */
+.forgot-password {
+  margin-top: 16px;
+  text-align: center;
+  width: 100%;
+}
+
+.forgot-button {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  font-size: 0.9rem;
+  padding: 4px 8px;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.forgot-button:hover {
+  color: #2563eb;
+}
+
+.back-to-login {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #4b5563;
+  font-size: 0.9rem;
+  padding: 4px 8px;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.back-button:hover {
+  color: #1f2937;
+}
