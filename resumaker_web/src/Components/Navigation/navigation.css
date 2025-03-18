@@ -1,0 +1,102 @@
+/* --------------------navPill------------------------- */
+.navPillContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    
+    position: fixed; /* Fixed instead of absolute for better responsiveness */
+    bottom: 5vh;
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center adjustment */
+    
+    padding: 8px;
+    min-width: 300px;
+    max-width: 90%;
+    
+    border: 2px solid #f3f4f6;
+    border-radius: 9999px; /* Always perfectly rounded */
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navPillContainer button img {
+    width: 24px;
+    height: 24px;
+    /* Placeholder for images - remove if you have actual images */
+    background-color: #ccc;
+    border-radius: 50%;
+}
+
+.navPillContainer button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    padding: 10px 20px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: color 0.3s;
+    outline: none; /* Remove outline */
+}
+
+.navPillContainer button:focus,
+.navPillContainer button:active {
+    outline: none;
+    border: none;
+    box-shadow: none; /* Some browsers use box-shadow for focus states */
+}
+
+.navPillContainer button.active {
+    color: #4f46e5; /* Color for active button text if needed */
+    border: none;
+    outline: none;
+}
+
+.slider {
+    position: absolute;
+    height: calc(100% - 16px); /* Account for container padding */
+    background-color: #f3f4f6;
+    border-radius: 9999px;
+    transition: 0.3s ease-in-out;
+    z-index: 1;
+}
+
+.navPillContainer button:hover {
+    background-color: rgba(243, 244, 246, 0.3);
+}
+
+/* Add custom transition when slider moves */
+.slider {
+    transition: left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.2s ease;
+}
+
+/* Responsive sizing for different screen sizes */
+@media (max-width: 768px) {
+    .navPillContainer {
+        min-width: 250px;
+        padding: 6px;
+    }
+    
+    .navPillContainer button {
+        padding: 8px 16px;
+    }
+    
+    .navPillContainer button img {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .slider {
+        height: calc(100% - 12px);
+    }
+}
+
+/* --------------------navBar--------------------------- */
+
+
+
+/* ---------------------accountDash----------------------- */
