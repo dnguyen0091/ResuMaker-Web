@@ -5,25 +5,30 @@
     justify-content: space-between;
     align-items: center;
     
-    position: fixed; /* Fixed instead of absolute for better responsiveness */
+    position: fixed;
     bottom: 5vh;
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Center adjustment */
+    left: 50%;
+    transform: translateX(-50%);
     
     padding: 8px;
     min-width: 300px;
     max-width: 90%;
     
-    border: 2px solid #f3f4f6;
-    border-radius: 9999px; /* Always perfectly rounded */
-    background-color: white;
+    border: 2px solid var(--border);
+    border-radius: 9999px;
+    background-color: var(--input-field);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .navPillContainer button img {
     width: 24px;
     height: 24px;
     border-radius: 50%;
+    filter: brightness(var(--icon-brightness, 1));
+    transition: filter 0.3s ease;
+    fill:var(--icon);
+    stroke:var(--icon);
 }
 
 .navPillContainer button {
@@ -38,38 +43,61 @@
     justify-content: center;
     align-items: center;
     transition: color 0.3s;
-    outline: none; /* Remove outline */
+    outline: none;
+    color: var(--secondary-text);
+    
 }
 
 .navPillContainer button:focus,
 .navPillContainer button:active {
     outline: none;
     border: none;
-    box-shadow: none; /* Some browsers use box-shadow for focus states */
+    box-shadow: none;
 }
 
 .navPillContainer button.active {
-    color: #4f46e5; /* Color for active button text if needed */
+    color: var(--accent);
     border: none;
     outline: none;
 }
 
 .slider {
     position: absolute;
-    height: calc(100% - 16px); /* Account for container padding */
-    background-color: #f3f4f6;
+    height: calc(100% - 16px);
+    background-color: var(--user-bubble);
     border-radius: 9999px;
-    transition: 0.3s ease-in-out;
+    transition: left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.2s ease, background-color 0.3s ease;
     z-index: 1;
 }
 
-.navPillContainer button:hover {
-    background-color: rgba(243, 244, 246, 0.3);
+.descHider {
+    visibility: hidden;
+    position: absolute;
+    z-index: 10;
+    top: -40px; /* Position above the button */
+    left: 50%;
+    transform: translateX(-50%); /* Center it horizontally */
+    background-color: var(--card);
+    color: var(--text);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border);
+    transition: visibility 0.2s ease, opacity 0.2s ease;
+    opacity: 0;
 }
 
-/* Add custom transition when slider moves */
-.slider {
-    transition: left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), width 0.2s ease;
+/* Fix the hover to target the button instead */
+.navPillContainer button:hover .descHider {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0.1s;
+}
+.navPillContainer button:hover {
+    background-color: rgba(var(--border-rgb, 243, 244, 246), 0.3);
+    border-radius: 9999px;
 }
 
 /* Responsive sizing for different screen sizes */
