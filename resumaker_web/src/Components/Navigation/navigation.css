@@ -23,8 +23,6 @@
 .navPillContainer button img {
     width: 24px;
     height: 24px;
-    /* Placeholder for images - remove if you have actual images */
-    background-color: #ccc;
     border-radius: 50%;
 }
 

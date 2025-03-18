@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+import builder from '../../assets/Icons/builder.svg';
+import interview from '../../assets/Icons/interview.svg';
+import analyzer from '../../assets/Icons/scan.svg';
 import './navigation.css';
-
 export default function NavPill() {
     // State to track active tab (0: Resume Builder, 1: Resume Analyzer, 2: Interview Tool)
     const [activeTab, setActiveTab] = useState(0);
@@ -50,7 +52,7 @@ export default function NavPill() {
                 onClick={handleResumeBuilderClick} 
                 className={activeTab === 0 ? 'active' : ''}
             >
-                <img src="" alt="Resume Builder" />
+                <img src={builder} alt="Resume Builder" />
             </button>
                 
             <button 
@@ -58,7 +60,7 @@ export default function NavPill() {
                 onClick={handleResumeAnalyzerClick}
                 className={activeTab === 1 ? 'active' : ''}
             >
-                <img src="" alt="Resume Analyzer" />
+                <img src={analyzer} alt="Resume Analyzer" />
             </button>
                 
             <button 
@@ -66,7 +68,7 @@ export default function NavPill() {
                 onClick={handleInterviewToolClick}
                 className={activeTab === 2 ? 'active' : ''}
             >
-                <img src="" alt="Interview Tool" />
+                <img src={interview} alt="Interview Tool" />
             </button>
         </div>
     );
