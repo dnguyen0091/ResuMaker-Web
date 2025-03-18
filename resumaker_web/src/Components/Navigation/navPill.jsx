@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import builder from '../../assets/Icons/builder.svg';
-import interview from '../../assets/Icons/interview.svg';
 import analyzer from '../../assets/Icons/scan.svg';
 import '../../index.css';
 import './navigation.css';
@@ -39,12 +38,6 @@ export default function NavPill() {
         // Redirect to resume analyzer page
         // window.location.href = '/resume-analyzer';
     }
-    
-    function handleInterviewToolClick() {
-        setActiveTab(2);
-        // Redirect to interview tool page
-        // window.location.href = '/interview-tool';
-    }
 
     return (
         <div className="navPillContainer">
@@ -66,15 +59,6 @@ export default function NavPill() {
                 <span className="descHider">Resumer Analyzer</span>
                 <img src={analyzer} alt="Resume Analyzer" />
 
-            </button>
-                
-            <button 
-                ref={buttonRefs[2]} 
-                onClick={handleInterviewToolClick}
-                className={activeTab === 2 ? 'active' : ''}
-            >
-                <span className="descHider">Interview Tool</span>
-                <img src={interview} alt="Interview Tool" />
             </button>
         </div>
     );

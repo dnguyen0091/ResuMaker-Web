@@ -1,0 +1,52 @@
+.dropDownContent
+{
+    display:flex;
+    flex-direction:column;
+    padding:0.5rem;
+    gap:0.5rem;
+
+    align-items: center;
+    justify-content: center;
+
+    width:100%;
+    height:100%;
+}
+
+.dropDownContent button
+{
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.dropDownContent button:hover
+{
+    background-color:var(--card);
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropDownContent button:active {
+    transform: scale(0.98);
+}
+
+/* Add a subtle underline animation */
+.dropDownContent button::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent, #4a90e2);
+    transition: width 0.3s ease;
+}
+
+.dropDownContent button:hover::after {
+    width: 100%;
+}
+
+#logout
+{
+    color:red;
+}
