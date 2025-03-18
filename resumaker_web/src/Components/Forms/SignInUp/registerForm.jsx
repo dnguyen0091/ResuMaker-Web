@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import eyeClosedIcon from '../../../assets/Icons/eyeClosed.svg';
+import eyeOpenIcon from '../../../assets/Icons/eyeOpen.svg';
 import './forms.css';
 
 export default function RegisterForm() {
@@ -26,9 +28,13 @@ export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  
+  // Password visibility state
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
 
+  
   // Handle input changes
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -64,6 +70,7 @@ export default function RegisterForm() {
     });
   }, [formData.password, formData.confirmPassword]);
 
+  const [registrationStep, setRegistrationStep] = useState('form');
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -88,7 +95,7 @@ export default function RegisterForm() {
       // API URL (best practice: use environment variables)
       const API_URL = 'https://resumaker-api.onrender.com';
       
-      // Send registration data to backend
+      // Send initial registration data to backend
       const response = await fetch(`${API_URL}/api/auth/register`, {
         method: 'POST',
         headers: {
@@ -110,23 +117,15 @@ export default function RegisterForm() {
         throw new Error(data.message || 'Registration failed');
       }
       
-      // Handle successful registration
-      setSuccessMsg('Registration successful! You can now log in.');
+      // Handle successful initial registration - switch to verification step
+      setSuccessMsg('Verification code has been sent to your email.');
+      setRegistrationStep('verification');
       
-      // Optional: Store token if returned and auto-login
-      if (data.token) {
-        localStorage.setItem('token', data.token);
-        // Could redirect or update global auth state here
+      // Store any necessary data from the response
+      // For example, if the API returns a temporary token or user ID
+      if (data.tempToken) {
+        localStorage.setItem('tempRegToken', data.tempToken);
       }
-      
-      // Reset form
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-      });
       
     } catch (err) {
       setError(err.message || 'An error occurred during registration');
@@ -136,8 +135,104 @@ export default function RegisterForm() {
     }
   };
 
+  const handleVerificationSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+    
+    try {
+      const API_URL = 'https://resumaker-api.onrender.com';
+      const verificationCode = document.getElementById('verificationCode').value;
+      const tempToken = localStorage.getItem('tempRegToken');
+      
+      // Connect to endpoint to verify user
+      const response = await fetch(`${API_URL}/api/auth/verify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Include temp token if available
+          ...(tempToken && { 'Authorization': `Bearer ${tempToken}` }),
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          verificationCode: verificationCode
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Verification failed');
+      }
+      
+      // Verification successful
+      localStorage.removeItem('tempRegToken'); // Clean up temp token
+      handleVerificationComplete();
+      
+    } catch (err) {
+      setError(err.message || 'Verification failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
+  
+  // Handle verification completion
+  const handleVerificationComplete = () => {
+    setSuccessMsg('Registration successful! You can now log in.');
+    setRegistrationStep('complete');
+    
+    // Reset form
+    setFormData({
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    });
+  };
+  
+  const handleResendCode = async () => {
+    setIsLoading(true);
+    setError('');
+    setSuccessMsg('');
+    
+    try {
+      const API_URL = 'https://resumaker-api.onrender.com';
+      
+      // Send request to resend verification code
+      const response = await fetch(`${API_URL}/api/auth/resend-verification`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to resend verification code');
+      }
+      
+      setSuccessMsg('A new verification code has been sent to your email.');
+      
+    } catch (err) {
+      setError(err.message || 'Failed to resend verification code. Please try again.');
+      console.error('Resend verification error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
   return (
     <div className="form-container">
+      {registrationStep === 'form' && (
+      <>
       <h2 className="form-title">Register</h2>
       
       {/* Error message */}
@@ -147,31 +242,34 @@ export default function RegisterForm() {
       {successMsg && <div className="form-success">{successMsg}</div>}
       
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label className="form-label" htmlFor="firstName">First Name</label>
-          <input 
-            type="text" 
-            id="firstName" 
-            className="form-input"
-            placeholder="Ex. John"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-          />
+        <div className="nameGroup">
+            <div className="form-group">
+              <label className="form-label" htmlFor="firstName">First Name</label>
+              <input 
+                type="text" 
+                id="firstName" 
+                className="form-input"
+                placeholder="Ex. John"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label" htmlFor="lastName">Last Name</label>
+              <input 
+                type="text" 
+                id="lastName" 
+                className="form-input"
+                placeholder="Ex. Doe"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+              />
+            </div>
         </div>
         
-        <div className="form-group">
-          <label className="form-label" htmlFor="lastName">Last Name</label>
-          <input 
-            type="text" 
-            id="lastName" 
-            className="form-input"
-            placeholder="Ex. Doe"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        
         
         <div className="form-group">
           <label className="form-label" htmlFor="email">Email</label>
@@ -204,9 +302,9 @@ export default function RegisterForm() {
               onClick={() => setShowPassword(prev => !prev)}
             >
               {showPassword ? (
-                <i className="password-icon hide-password">👁️‍🗨️</i>
+                <img className="password-icon hide-password" src={eyeOpenIcon}></img>
               ) : (
-                <i className="password-icon show-password">👁️</i>
+                <img className="password-icon show-password" src={eyeClosedIcon}></img>
               )}
             </button>
           </div>
@@ -240,23 +338,23 @@ export default function RegisterForm() {
           <label className="form-label" htmlFor="confirmPassword">Confirm Password</label>
           <div className="password-input-container">
             <input 
-              type={showPassword ? "text" : "password"} 
+              type={showConfirmPassword ? "text" : "password"} 
               id="confirmPassword" 
               className="form-input"
               placeholder="Confirm password"
-              value={formData.password}
+              value={formData.confirmPassword}
               onChange={handleChange}
               required
             />
             <button 
               type="button"
               className="password-toggle-button"
-              onClick={() => setShowPassword(prev => !prev)}
+              onClick={() => setShowConfirmPassword(prev => !prev)}
             >
-              {showPassword ? (
-                <i className="password-icon hide-password">👁️‍🗨️</i>
+              {showConfirmPassword ? (
+                <img className="password-icon hide-password" src={eyeOpenIcon}></img>
               ) : (
-                <i className="password-icon show-password">👁️</i>
+                <img className="password-icon show-password" src={eyeClosedIcon}></img>
               )}
             </button>
           </div>
@@ -277,6 +375,66 @@ export default function RegisterForm() {
           {isLoading ? 'Registering...' : 'Register'}
         </button>
       </form>
+      </>
+      )}
+      {registrationStep === 'verification' && (
+        <div className="verification-container">
+          <h2 className="form-title">Verify</h2>
+          
+          {/* Error message */}
+          {error && <div className="form-error">{error}</div>}
+          
+          {/* Success message */}
+          {successMsg && <div className="form-success">{successMsg}</div>}
+          
+          <p className="verification-message">We've sent a verification code to <strong>{formData.email}</strong>.</p>
+          
+          <form onSubmit={handleVerificationSubmit} className="verification-form">
+            <div className="form-group">
+              {/* <label className="form-label" htmlFor="verificationCode">Verification Code</label> */}
+              <input 
+                type="text" 
+                id="verificationCode" 
+                className="form-input" 
+                placeholder="Enter verification code" 
+                required
+              />
+            </div>
+            <button 
+              type="submit" 
+              className="form-button"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Verifying...' : 'Verify'}
+            </button>
+            
+            <div className="resend-code">
+              <p>Didn't receive a code?</p>
+              <button 
+                type="button" 
+                className="resend-button"
+                onClick={handleResendCode}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Sending...' : 'Resend Code'}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+      {registrationStep === 'complete' && (
+        <div className="verification-container">
+          <h2 className="form-title">Registration Complete</h2>
+          <p className="verification-message form-success">Registration successful! You can now log in.</p>
+          <button 
+            onClick={() => window.location.href = '/login'} 
+            className="form-button"
+          >
+            Go to Login
+          </button>
+        </div>
+      )}
     </div>
+    
   );
 }

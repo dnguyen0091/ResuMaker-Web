@@ -17,6 +17,12 @@
     margin-bottom: 16px;
   }
   
+  .nameGroup
+  {
+    display:flex;
+    flex-direction: row;
+    gap:0.5rem;
+  }
   .form-label {
     display: block;
     font-size: 0.875rem;
@@ -34,13 +40,13 @@
   
   .form-input:focus {
     outline: none;
-    border-color: #3b82f6;
+    border-color: var(--accent);
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
   }
   
   .form-button {
     width: 100%;
-    background-color: #3b82f6;
+    background-color: var(--accent);
     color: white;
     padding: 8px 16px;
     border: none;
@@ -51,7 +57,7 @@
   }
   
   .form-button:hover {
-    background-color: #2563eb;
+    background-color: var(--accent);
   }
   
   .form-button:focus {
@@ -62,7 +68,6 @@
 .password-requirements {
   margin-top: 8px;
   padding: 10px;
-  background-color: grey;
   border: 1px solid #e2e8f0;
   border-radius: 4px;
 }
@@ -179,4 +184,149 @@
 /* Optional: Add hover effect */
 .password-toggle-button:hover .password-icon {
   color: #334155;
+}
+
+
+
+/*---------------------------- Verification------------------ */
+
+
+.verification-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  padding: 24px;
+  text-align: center;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.verification-message {
+  margin: 0 0 16px;
+  font-size: 1rem;
+  line-height: 1.5;
+  
+}
+
+.verification-form {
+  width: 100%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* For the "complete" step */
+.verification-container .form-button {
+  margin-top: 16px;
+  max-width: 200px;
+}
+
+/* Make error and success messages more consistent */
+.form-error, .form-success {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.form-error {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #f87171;
+}
+
+.form-success {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+
+/* Resend Code Styles */
+.resend-code {
+  margin-top: 20px;
+  text-align: center;
+  width: 100%;
+}
+
+.resend-code p {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.resend-button {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 0.9rem;
+  padding: 4px 8px;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.resend-button:hover {
+  color: var(--accent);
+}
+
+.resend-button:disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+
+
+
+
+/* ----------------------Forgot------------------------ */
+.forgot-password {
+  margin-top: 16px;
+  text-align: center;
+  width: 100%;
+}
+
+.forgot-button {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 0.9rem;
+  padding: 4px 8px;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.forgot-button:hover {
+  color: var(--accent);
+}
+
+.back-to-login {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #4b5563;
+  font-size: 0.9rem;
+  padding: 4px 8px;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.back-button:hover {
+  color: #1f2937;
 }
