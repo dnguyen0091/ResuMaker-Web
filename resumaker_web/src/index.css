@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@import "tailwindcss";
-
 :root {
   /* Dark Theme Colors */
   --background-dark: #343541; /* Main background */
@@ -13,31 +11,21 @@
   --user-bubble-dark: #202123; /* User message background */
   --input-field-dark: #40414F; /* Input field background */
   --icon-dark: #D9D9E3; /* Icons */
-
-  /* Light Theme Colors */
-  --background-light: #F7F7F8; /* Main background */
-  --card-light: #FFFFFF; /* Chat bubbles */
-  --text-light: #202123; /* Primary text */
-  --secondary-text-light: #6E6E80; /* Secondary text */
-  --border-light: #D9D9E3; /* Borders/dividers */
-  --accent-light: #19C37D; /* GPT accent (green) */
-  --user-bubble-light: #E5E5EA; /* User message background */
-  --input-field-light: #FFFFFF; /* Input field background */
-  --icon-light: #ACACBE; /* Icons */
-
-  /* Default theme colors (using light theme as default) */
-  --background: var(--background-light);
-  --card: var(--card-light);
-  --text: var(--text-light);
-  --secondary-text: var(--secondary-text-light);
-  --border: var(--border-light);
-  --accent: var(--accent-light);
-  --user-bubble: var(--user-bubble-light);
-  --input-field: var(--input-field-light);
-  --icon: var(--icon-light);
+  
+  /* Default theme colors (using light theme values) */
+  --background: #F7F7F8; /* Main background */
+  --card: #FFFFFF; /* Chat bubbles */
+  --text: #202123; /* Primary text */
+  --secondary-text: #6E6E80; /* Secondary text */
+  --border: #D9D9E3; /* Borders/dividers */
+  --accent: #19C37D; /* GPT accent (green) */
+  --user-bubble: #E5E5EA; /* User message background */
+  --input-field: #FFFFFF; /* Input field background */
+  --icon: #ACACBE; /* Icons */
+  --icon-brightness: 1; /* Normal brightness in light mode */
 }
 
-
+/* Dark theme class - apply this to enable dark mode */
 .theme-dark {
   --background: var(--background-dark);
   --card: var(--card-dark);
@@ -49,31 +37,4 @@
   --input-field: var(--input-field-dark);
   --icon: var(--icon-dark);
   --icon-brightness: 0.85; /* Slightly dim icons in dark mode */
-}
-
-.theme-light {
-  --background: var(--background-light);
-  --card: var(--card-light);
-  --text: var(--text-light);
-  --secondary-text: var(--secondary-text-light);
-  --border: var(--border-light);
-  --accent: var(--accent-light);
-  --user-bubble: var(--user-bubble-light);
-  --input-field: var(--input-field-light);
-  --icon: var(--icon-light);
-  --icon-brightness: 1; /* Normal brightness in light mode */
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not(.theme-light):not(.theme-dark) {
-    --background: var(--background-dark);
-    --card: var(--card-dark);
-    --text: var(--text-dark);
-    --secondary-text: var(--secondary-text-dark);
-    --border: var(--border-dark);
-    --accent: var(--accent-dark);
-    --user-bubble: var(--user-bubble-dark);
-    --input-field: var(--input-field-dark);
-    --icon: var(--icon-dark);
-  }
 }
