@@ -18,6 +18,9 @@ export default function UploadPDF({ onUploadSuccess }) {
         
         setIsUploading(true);
         
+        // Create a URL for the file to be used for preview
+        const fileUrl = URL.createObjectURL(file);
+        
         // Here you would typically upload the file to your server
         // For now, we'll simulate with a timeout
         setTimeout(() => {
@@ -26,7 +29,17 @@ export default function UploadPDF({ onUploadSuccess }) {
                 fileName: file.name,
                 fileSize: file.size,
                 uploadDate: new Date().toISOString(),
+                fileUrl: fileUrl, // Include the file URL for preview
                 // Additional analysis data would go here
+                score: 78,
+                keywordMatch: 85,
+                formatting: 72,
+                contentQuality: 65,
+                suggestions: [
+                    "Add more keywords related to the position",
+                    "Improve formatting in the skills section",
+                    "Quantify your achievements with numbers"
+                ]
             };
             
             // Call the callback with the results
@@ -46,7 +59,6 @@ export default function UploadPDF({ onUploadSuccess }) {
                     Upload your resume as a PDF to analyze its effectiveness and get feedback
                 </p>
                 
-                {/* Fixed React attributes: for → htmlFor, class → className */}
                 <label htmlFor="file" className="custom-file-upload">
                     <div className="icon">
                         <svg viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg">
