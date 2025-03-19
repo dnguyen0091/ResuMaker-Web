@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import profile from '../../assets/Icons/profile.svg';
 import AccountDashboard from './accountDashboard/accountDash';
 import './navigation.css';
 
 export default function NavBar() {
+    const navigate = useNavigate();
     // State to control dropdown visibility
     const [showDropdown, setShowDropdown] = useState(false);
     // Reference to the dropdown container for click outside detection
@@ -34,18 +36,15 @@ export default function NavBar() {
     }, [showDropdown]);
 
     const handleHomeClick = () => {
-        // Redirect to home page
-        window.location.href = '/';
+        navigate('/');
     };
 
     const handleResumeBuilderClick = () => {
-        // Redirect to resume builder page
-        window.location.href = '/resume-builder';
+        navigate('/resume-builder');
     };
 
     const handleResumeAnalyzerClick = () => {
-        // Redirect to resume analyzer page
-        window.location.href = '/resume-analyzer';
+        navigate('/resume-analyzer');
     };
 
     return (

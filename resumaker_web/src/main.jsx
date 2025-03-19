@@ -1,10 +1,10 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import Landing from './Pages/landing/landing'
-import './index.css'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './Pages/App';
+import './index.css'; // If you have global styles
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <Landing />
-  </StrictMode>,
-)
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);

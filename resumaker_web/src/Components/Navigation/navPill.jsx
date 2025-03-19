@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Change this line - use useNavigate instead of navigate
 import builder from '../../assets/Icons/builder.svg';
 import analyzer from '../../assets/Icons/scan.svg';
 import '../../index.css';
 import './navigation.css';
 
 export default function NavPill() {
+    const navigate = useNavigate(); // Initialize the navigate function
     // State to track active tab (0: Resume Builder, 1: Resume Analyzer, 2: Interview Tool)
     const [activeTab, setActiveTab] = useState(0);
     
@@ -30,13 +32,13 @@ export default function NavPill() {
     function handleResumeBuilderClick() {
         setActiveTab(0);
         // Redirect to resume builder page
-        // window.location.href = '/resume-builder';
+        navigate('/resume-builder');
     }
     
     function handleResumeAnalyzerClick() {
         setActiveTab(1);
         // Redirect to resume analyzer page
-        // window.location.href = '/resume-analyzer';
+        navigate('/resume-analyzer');
     }
 
     return (
@@ -56,9 +58,8 @@ export default function NavPill() {
                 onClick={handleResumeAnalyzerClick}
                 className={activeTab === 1 ? 'active' : ''}
             >
-                <span className="descHider">Resumer Analyzer</span>
+                <span className="descHider">Resume Analyzer</span>
                 <img src={analyzer} alt="Resume Analyzer" />
-
             </button>
         </div>
     );
