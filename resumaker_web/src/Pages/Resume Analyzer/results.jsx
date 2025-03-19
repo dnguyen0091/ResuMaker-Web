@@ -1,8 +1,9 @@
 
 export default function results() {
     return (
-        <div>
-            <h1>Results</h1>
+        <div className="resultsContainer">
+            <div className="feedback"></div>
+            <div className="previewPDF"></div>
         </div>
     );
 }
