@@ -55,26 +55,28 @@ export default function Builder() {
     };
 
     return (
-        <div className="builder-container">
-            <div className="builder-section">
-                <PersonalInfo 
-                    personalInfo={personalInfo} 
-                    onChange={handlePersonalInfoChange}
-                />
+        <div className="resume-builder-page">
+            <div className="builder-container">
+                <div className="builder-section">
+                    <PersonalInfo 
+                        personalInfo={personalInfo} 
+                        onChange={handlePersonalInfoChange}
+                    />
+                    
+                    <Education 
+                        educationList={educationList} 
+                        setEducationList={setEducationList} 
+                    />
+                    
+                    <Experience
+                        experienceList={experienceList}
+                        setExperienceList={setExperienceList}
+                    />
+                </div>
                 
-                <Education 
-                    educationList={educationList} 
-                    setEducationList={setEducationList} 
-                />
-                
-                <Experience
-                    experienceList={experienceList}
-                    setExperienceList={setExperienceList}
-                />
-            </div>
-            
-            <div className="preview-section">
-                <DisplayPreview resumeData={resumeData} />
+                <div className="preview-section">
+                    <DisplayPreview resumeData={resumeData} />
+                </div>
             </div>
         </div>
     );

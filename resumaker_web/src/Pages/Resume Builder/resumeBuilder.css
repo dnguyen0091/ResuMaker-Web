@@ -1,28 +1,72 @@
 /*---------------------Builder Container-------------------*/
+
+/* Full page container */
+.resume-builder-page {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  width: 100%;
+
+}
+
+/* Ensures content takes full height */
+#root, 
+body, 
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.builder-title
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Equal Split Layout */
 .builder-container {
   display: flex;
   flex-direction: row;
-  height: 100%;
+  height: 100vh; /* Use viewport height for fullscreen layout */
+  width: 100%;
   background-color: var(--background);
-  border-radius: 0.5rem;
-  gap: 1rem;
-  overflow: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  overflow: hidden;
 }
 
 /* Builder Section (Left Half) */
 .builder-section {
-  flex: 1;
+  /* flex: 1; Take exactly half the space */
+  max-width: 50%; /* Ensure it doesn't exceed half */
   height: 100%;
   overflow-y: auto;
-  padding: 1.5rem;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  /* padding: 1.5rem; */
+  border-right: 1px solid var(--border);
+  box-sizing: border-box;
 }
 
+/* Preview Section (Right Half) */
+.preview-section {
+  flex: 1; /* Take exactly half the space */
+  max-width: 50%; /* Ensure it doesn't exceed half */
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Preview Container */
+.preview-container {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  background-color: var(--background);
+}
+
+/* Make sure scrollbars don't affect layout */
 .builder-section::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 .builder-section::-webkit-scrollbar-track {
@@ -31,7 +75,33 @@
 
 .builder-section::-webkit-scrollbar-thumb {
   background-color: var(--border);
-  border-radius: 10px;
+  border-radius: 4px;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 1024px) {
+  .builder-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .builder-section,
+  .preview-section {
+    max-width: 100%;
+    flex: none;
+    width: 100%;
+  }
+  
+  .builder-section {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .preview-section {
+    height: 50vh; /* Half height on mobile */
+    min-height: 500px;
+  }
 }
 
 /*---------------------Common Section Styles-------------------*/
@@ -380,249 +450,5 @@ label {
   font-size: 1rem;
 }
 
-/* Preview Container and Layout */
-.preview-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background-color: var(--background);
-  overflow: hidden;
-}
-
-.preview-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.5rem;
-  background-color: var(--card);
-  border-bottom: 1px solid var(--border);
-}
-
-.preview-header h2 {
-  margin: 0;
-  color: var(--text);
-  font-size: 1.25rem;
-}
-
-.download-button {
-  background-color: var(--accent);
-  color: white;
-  border: none;
-  border-radius: 0.25rem;
-  padding: 0.5rem 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.download-button:hover:not(:disabled) {
-  filter: brightness(1.1);
-}
-
-.download-button:disabled {
-  background-color: var(--border);
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.preview-area {
-  flex: 1;
-  overflow: auto;
-  padding: 1.5rem;
-  background-color: #f5f5f5;
-}
-
-.resume-wrapper {
-  width: 100%;
-  max-width: 8.5in;
-  height: fit-content;
-  margin: 0 auto;
-}
-
-/* Placeholder styles - shown when no data is entered */
-.resume-placeholder {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #aaaaaa;
-  text-align: center;
-  border: 2px dashed #dddddd;
-  border-radius: 0.5rem;
-  min-height: 80%;
-}
-
-.resume-placeholder p {
-  margin: 0.5rem 0;
-  font-size: 1.5rem;
-}
-
-.placeholder-hint {
-  font-size: 1rem !important;
-  opacity: 0.7;
-}
-
-/* Builder Container Layout */
-.builder-container {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  background-color: var(--background);
-  border-radius: 0.5rem;
-  overflow: hidden;
-}
-
-.builder-section {
-  flex: 1;
-  height: 100%;
-  overflow-y: auto;
-  padding: 1.5rem;
-  border-right: 1px solid var(--border);
-}
-
-.preview-section {
-  flex: 1;
-  height: 100%;
-}
-
-/* Responsive layout adjustments */
-@media (max-width: 1024px) {
-  .builder-container {
-      flex-direction: column;
-  }
-  
-  .builder-section, .preview-section {
-      flex: none;
-      width: 100%;
-      height: auto;
-      min-height: 50vh;
-  }
-  
-  .builder-section {
-      border-right: none;
-      border-bottom: 1px solid var(--border);
-  }
-  
-  .resume-contact-info {
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-  }
-}
 
 
-/* Resume Content Sections */
-.resume-section {
-  margin-bottom: 1.5rem;
-}
-
-.section-title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: #222;
-  border-bottom: 1px solid #999;
-  padding-bottom: 0.25rem;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-}
-
-/* Education and Experience Entries */
-.education-entry,
-.experience-entry {
-  margin-bottom: 1.25rem;
-}
-
-.entry-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-}
-
-.main-details {
-  flex: 2;
-}
-
-.date-location {
-  flex: 1;
-  text-align: right;
-}
-
-.degree,
-.job-title {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin: 0;
-  color: #333;
-}
-
-.school,
-.company {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0.25rem 0 0;
-  color: #444;
-}
-
-.date-range {
-  font-size: 0.9rem;
-  font-style: italic;
-  color: #555;
-}
-
-.location {
-  font-size: 0.9rem;
-  color: #666;
-  margin-top: 0.25rem;
-}
-
-.entry-description {
-  font-size: 0.9rem;
-  color: #333;
-  line-height: 1.5;
-}
-
-/* Bullet Point Formatting */
-.description-bullets {
-  margin: 0;
-  padding-left: 1.25rem;
-}
-
-.bullet-point {
-  position: relative;
-  margin-bottom: 0.25rem;
-  line-height: 1.4;
-}
-
-.bullet-point:before {
-  content: '•';
-  position: absolute;
-  left: -1.25rem;
-}
-
-.description-text {
-  margin: 0;
-  white-space: pre-line;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .entry-header {
-      flex-direction: column;
-  }
-  
-  .date-location {
-      text-align: left;
-      margin-top: 0.5rem;
-  }
-}
-
-/* Equal spacing between sections */
-.resume-section + .resume-section {
-  margin-top: 2rem;
-}
-
-/* More professional styling for the overall document */
-.resume-document {
-  line-height: 1.6;
-}

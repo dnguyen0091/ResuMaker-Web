@@ -1,18 +1,42 @@
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import './Preview/Custom.css';
+import './Preview/EducationExperience.css';
+import './Preview/preview.css';
 import './resumeBuilder.css';
-
 /**
  * A PDF preview component that updates in real-time as the user inputs data
  * @param {Object} resumeData - The resume data from the builder form
  */
 export default function DisplayPreview({ resumeData = {} }) {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [contentHeight, setContentHeight] = useState(0);
+  const [pageCount, setPageCount] = useState(1);
   const resumeRef = useRef(null);
   
   // Destructure the resumeData for easier access
   const { personalInfo = {}, education = [], experience = [] } = resumeData;
+
+  // Calculate page count whenever content changes
+  useEffect(() => {
+    if (!resumeRef.current) return;
+    
+    // Get the height of the content
+    const height = resumeRef.current.scrollHeight;
+    setContentHeight(height);
+    
+    // Calculate number of pages based on A4 dimensions
+    // A4 is 210mm × 297mm, with 1in margins that's roughly 160mm × 247mm usable space
+    // We need to calculate based on the current width to get proportion right
+    const contentWidth = resumeRef.current.clientWidth;
+    const a4Ratio = 210 / 297; // width / height
+    const contentRatio = contentWidth / height;
+    
+    // This calculation gives us approximate page count based on content area
+    const estimatedPages = Math.ceil(height / (contentWidth / a4Ratio));
+    setPageCount(estimatedPages);
+  }, [resumeData]);
 
   /**
    * Generates and downloads a PDF of the current preview content
@@ -26,7 +50,9 @@ export default function DisplayPreview({ resumeData = {} }) {
       // Generate PDF using html2canvas and jsPDF
       const canvas = await html2canvas(resumeRef.current, {
         scale: 2, // Higher scale for better quality
-        backgroundColor: '#FFFFFF'
+        backgroundColor: '#FFFFFF',
+        // Capture the full height, even if it overflows
+        height: resumeRef.current.scrollHeight
       });
       
       const imgData = canvas.toDataURL('image/png');
@@ -41,7 +67,29 @@ export default function DisplayPreview({ resumeData = {} }) {
       const pageHeight = 297; // A4 height in mm
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      // Check if we need multiple pages
+      if (imgHeight > pageHeight) {
+        // Multi-page PDF required
+        let heightLeft = imgHeight;
+        let position = 0;
+        let page = 1;
+        
+        // Add first page
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+        
+        // Add subsequent pages as needed
+        while (heightLeft > 0) {
+          position = -pageHeight * page;
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+          page++;
+        }
+      } else {
+        // Single page PDF
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      }
       
       // Generate a filename with the person's name if available
       const fileName = personalInfo.name 
@@ -98,20 +146,28 @@ export default function DisplayPreview({ resumeData = {} }) {
       {/* Header with download button */}
       <div className="preview-header">
         <h2>Resume Preview</h2>
-        <button 
-          className="download-button"
-          onClick={downloadPDF}
-          disabled={isGenerating}
-        >
-          {isGenerating ? 'Generating...' : 'Download PDF'}
-        </button>
+        <div className="preview-actions">
+          {pageCount > 1 && (
+            <div className="page-indicator">
+              <span>Approximately {pageCount} pages</span>
+            </div>
+          )}
+          <button 
+            className="download-button"
+            onClick={downloadPDF}
+            disabled={isGenerating}
+          >
+            {isGenerating ? 'Generating...' : 'Download PDF'}
+          </button>
+        </div>
       </div>
       
       {/* The preview area - this will contain the resume content */}
       <div className="preview-area">
         <div className="resume-wrapper">
+          <div className="paper-size-indicator"></div>
           {/* This div will be converted to PDF - referenced by resumeRef */}
-          <div className="resume-document" ref={resumeRef}>
+          <div className="resume-document a4-paper" ref={resumeRef}>
             {/* Personal Info Section - Rendered if we have data */}
             {hasPersonalInfo ? (
               <div className="resume-header">

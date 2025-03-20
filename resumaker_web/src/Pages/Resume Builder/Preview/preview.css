@@ -1,0 +1,275 @@
+/* Preview area container */
+.preview-area {
+  flex: 1;
+  overflow: auto;
+  padding: 1.5rem;
+  background-color: #f2f2f2; /* Light gray background */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height:80vh;
+}
+
+/* Wrapper for the resume document */
+.resume-wrapper {
+  position: relative;
+  width: min(100%, 595px); /* A4 width in pixels (595px = 210mm at 72dpi) */
+  height: min(100%, 842px); /* A4 height in pixels (842px = 297mm at 72dpi) */
+  margin: 0 auto;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  /* Scale down the wrapper for better visibility */
+  transform: scale(0.8);
+  transform-origin: top center;
+  margin-top: -10%; /* Adjust to compensate for scaling */
+}
+
+/* A4 paper styling */
+.a4-paper {
+  position: relative;
+  background-color: white;
+  width: 100%;
+  aspect-ratio: 1/1.414; /* A4 aspect ratio (210/297) */
+  padding: 20mm; /* Standard 2cm margin */
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  line-height: 1.5;
+  overflow: visible; /* Allow content to be visible even if it overflows */
+}
+
+/* Page indicator */
+.paper-size-indicator {
+  position: absolute;
+  top: 297mm; /* Height of A4 */
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: rgba(255, 0, 0, 0.3);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* When content exceeds one page, add subtle visual indicators */
+.resume-document::after {
+  content: '';
+  position: absolute;
+  top: 297mm; /* Height of A4 */
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.2),
+    rgba(0, 0, 0, 0.2) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Preview section */
+.preview-section {
+  flex: 1;
+  max-width: 50%;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden; /* Prevent preview from causing outer container overflow */
+}
+
+/* Preview container */
+.preview-container {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  /* max-height: 100vh; */
+  overflow: hidden;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1440px) {
+  .resume-wrapper {
+    transform: scale(0.75);
+    margin-top: -12%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .resume-wrapper {
+    transform: scale(0.7);
+    margin-top: -15%;
+  }
+}
+
+@media (max-width: 768px) {
+  .builder-container {
+    flex-direction: column;
+  }
+  
+  .builder-section,
+  .preview-section {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .preview-section {
+    height: 100vh;
+    max-height: 100vh;
+  }
+  
+  .resume-wrapper {
+    transform: scale(0.65);
+    margin-top: -18%;
+  }
+}
+
+@media (max-width: 480px) {
+  .resume-wrapper {
+    transform: scale(0.5);
+    margin-top: -25%;
+  }
+}
+
+
+
+/* Preview Container and Layout */
+  
+  .preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background-color: var(--card);
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .preview-header h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.25rem;
+  }
+  
+  .download-button {
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .download-button:hover:not(:disabled) {
+    filter: brightness(1.1);
+  }
+  
+  .download-button:disabled {
+    background-color: var(--border);
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  .preview-area {
+    flex: 1;
+    overflow: auto;
+    padding: 1.5rem;
+    background-color: #f5f5f5;
+  }
+  
+  .resume-wrapper {
+    width: 100%;
+    max-width: 8.5in;
+    height: fit-content;
+    margin: 0 auto;
+  }
+  
+  /* Placeholder styles - shown when no data is entered */
+  .resume-placeholder {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #aaaaaa;
+    text-align: center;
+    border: 2px dashed #dddddd;
+    border-radius: 0.5rem;
+    min-height: 80%;
+  }
+  
+  .resume-placeholder p {
+    margin: 0.5rem 0;
+    font-size: 1.5rem;
+  }
+  
+  .placeholder-hint {
+    font-size: 1rem !important;
+    opacity: 0.7;
+  }
+  
+  /* Builder Container Layout */
+  .builder-container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    background-color: var(--background);
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  
+  .builder-section {
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
+    padding: 1.5rem;
+    border-right: 1px solid var(--border);
+  }
+  
+  .preview-section {
+    flex: 1;
+    height: 100%;
+  }
+  
+  /* Responsive layout adjustments */
+  @media (max-width: 1024px) {
+    .builder-container {
+        flex-direction: column;
+    }
+    
+    .builder-section, .preview-section {
+        flex: none;
+        width: 100%;
+        height: auto;
+        min-height: 50vh;
+    }
+    
+    .builder-section {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .resume-contact-info {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+  }
+  
+  
+  /* Resume Content Sections */
+  .resume-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #222;
+    border-bottom: 1px solid #999;
+    padding-bottom: 0.25rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }

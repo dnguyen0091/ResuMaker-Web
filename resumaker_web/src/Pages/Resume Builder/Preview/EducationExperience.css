@@ -1,0 +1,99 @@
+/* Education and Experience Entries */
+.education-entry,
+.experience-entry {
+  margin-bottom: 1.25rem;
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.main-details {
+  flex: 2;
+}
+
+.date-location {
+  flex: 1;
+  text-align: right;
+}
+
+.degree,
+.job-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.school,
+.company {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0.25rem 0 0;
+  color: #444;
+}
+
+.date-range {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #555;
+}
+
+.location {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.entry-description {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* Bullet Point Formatting */
+.description-bullets {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.bullet-point {
+  position: relative;
+  margin-bottom: 0.25rem;
+  line-height: 1.4;
+}
+
+.bullet-point:before {
+  content: '•';
+  position: absolute;
+  left: -1.25rem;
+}
+
+.description-text {
+  margin: 0;
+  white-space: pre-line;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .entry-header {
+      flex-direction: column;
+  }
+  
+  .date-location {
+      text-align: left;
+      margin-top: 0.5rem;
+  }
+}
+
+/* Equal spacing between sections */
+.resume-section + .resume-section {
+  margin-top: 2rem;
+}
+
+/* More professional styling for the overall document */
+.resume-document {
+  line-height: 1.6;
+}

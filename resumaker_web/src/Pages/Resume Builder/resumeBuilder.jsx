@@ -6,9 +6,8 @@ export default function ResumeBuilder() {
     
     return (
         <div className="resume-builder-container">
-            <h1 className="builder-title">Create Your Resume</h1>
+            <h1 className="builder-title">Resume Builder</h1>
             <ChatTab/>
-            
             <Builder/>
             
         </div>
