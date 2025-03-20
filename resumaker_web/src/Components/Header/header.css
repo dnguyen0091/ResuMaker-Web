@@ -72,6 +72,6 @@
 
 /* Override the general img rule specifically for header images */
 .header img {
-    width: 5vw;
-    height: 5vh;
+    width: auto;
+    height: 6vh;
 }

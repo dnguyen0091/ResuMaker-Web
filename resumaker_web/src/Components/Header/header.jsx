@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../../assets/ResumakerLogo.png';
+import logo from '../../assets/Resumaker.png';
 import '../../index.css';
 import NavBar from '../Navigation/navBar.jsx';
 import './header.css';
