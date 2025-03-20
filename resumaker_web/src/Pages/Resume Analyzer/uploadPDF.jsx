@@ -63,8 +63,9 @@ export default function UploadPDF({ onUploadSuccess }) {
     
     return (
         <div className="upload-page-container">
+            <h1>Resume Analyzer</h1>
             <div className="upload-container">
-                <h1>Resume Analyzer</h1>
+                
                 <p className="upload-description">
                     Upload your resume as a PDF to analyze its effectiveness and get feedback
                 </p>

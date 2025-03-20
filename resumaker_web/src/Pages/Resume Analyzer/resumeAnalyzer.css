@@ -6,8 +6,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     min-height: 80vh; /* Use 80vh to account for header and nav */
     width: 100%;
+    margin-top:0;
 }
   
 .upload-container {
@@ -25,8 +27,11 @@
 }
   
 h1 {
-    margin-bottom: 1rem;
+    margin-bottom: 5rem;
     color: var(--text, #1a202c);
+    font-size: 3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
 }
   
 .upload-description {
