@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import './resumeAnalyzer';
+import './resumeAnalyzer.css';
 
 export default function Results({ pdfData, onReset }) {
     // Clean up the file URL when component unmounts to prevent memory leaks
@@ -10,6 +10,13 @@ export default function Results({ pdfData, onReset }) {
             }
         };
     }, [pdfData]);
+    
+    // Function to determine score color based on value
+    const getScoreColor = (score) => {
+        if (score >= 80) return 'var(--accent)';
+        if (score >= 60) return '#f59e0b';
+        return '#ef4444';
+    };
 
     if (!pdfData) return null;
 
@@ -17,8 +24,7 @@ export default function Results({ pdfData, onReset }) {
         <div className="results-page">
             <div className="results-container">
                 <div className="results-header">
-                    <p class="pageTitle">Resume Analysis Results</p>
-                    
+                    <p className="pageTitle">Resume Analysis Results</p> {/* Fixed class to className */}
                 </div>
                 
                 <div className="results-content">
@@ -41,8 +47,6 @@ export default function Results({ pdfData, onReset }) {
                                 Analyze Another Resume
                             </button>
                         </div>
-                        
-
                     </div>
                     
                     {/* Analysis Results Section */}
@@ -51,7 +55,7 @@ export default function Results({ pdfData, onReset }) {
                         
                         <div className="overall-score">
                             <div className="score-circle">
-                                <span>{pdfData.score}%</span>
+                                <span style={{ color: 'var(--accent)' }}>{pdfData.score}%</span>
                             </div>
                             <p>Overall Score</p>
                         </div>
@@ -60,7 +64,13 @@ export default function Results({ pdfData, onReset }) {
                             <div className="score-category">
                                 <h3>Keyword Match</h3>
                                 <div className="score-bar">
-                                    <div className="score-fill" style={{ width: `${pdfData.keywordMatch}%` }}></div>
+                                    <div 
+                                        className="score-fill" 
+                                        style={{ 
+                                            width: `${pdfData.keywordMatch}%`,
+                                            backgroundColor: getScoreColor(pdfData.keywordMatch)
+                                        }}
+                                    ></div>
                                 </div>
                                 <span>{pdfData.keywordMatch}%</span>
                             </div>
@@ -68,7 +78,13 @@ export default function Results({ pdfData, onReset }) {
                             <div className="score-category">
                                 <h3>Formatting</h3>
                                 <div className="score-bar">
-                                    <div className="score-fill" style={{ width: `${pdfData.formatting}%` }}></div>
+                                    <div 
+                                        className="score-fill" 
+                                        style={{ 
+                                            width: `${pdfData.formatting}%`,
+                                            backgroundColor: getScoreColor(pdfData.formatting)
+                                        }}
+                                    ></div>
                                 </div>
                                 <span>{pdfData.formatting}%</span>
                             </div>
@@ -76,7 +92,13 @@ export default function Results({ pdfData, onReset }) {
                             <div className="score-category">
                                 <h3>Content Quality</h3>
                                 <div className="score-bar">
-                                    <div className="score-fill" style={{ width: `${pdfData.contentQuality}%` }}></div>
+                                    <div 
+                                        className="score-fill" 
+                                        style={{ 
+                                            width: `${pdfData.contentQuality}%`,
+                                            backgroundColor: getScoreColor(pdfData.contentQuality)
+                                        }}
+                                    ></div>
                                 </div>
                                 <span>{pdfData.contentQuality}%</span>
                             </div>
@@ -90,10 +112,6 @@ export default function Results({ pdfData, onReset }) {
                                 ))}
                             </ul>
                         </div>
-                        
-                        {/* <button className="download-button">
-                            Download Full Report
-                        </button> */}
                     </div>
                 </div>
             </div>
