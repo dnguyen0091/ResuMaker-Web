@@ -1,0 +1,226 @@
+/*======================================
+  TABLE OF CONTENTS
+  
+  1. RESUME DOCUMENT STRUCTURE
+  2. HEADER STYLING
+  3. SECTION STYLING
+  4. ENTRY STYLING
+  5. TEXT FORMATTING
+======================================*/
+
+/*======================================
+  1. RESUME DOCUMENT STRUCTURE
+======================================*/
+/* Main resume document */
+.resume-document {
+    background-color: white;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+    min-height: 11in;
+    width: 100%;
+    aspect-ratio: 8.5 / 11;
+    margin: 0 auto;
+    /* Further reduced padding to maximize space */
+    padding: 0.4in 0.6in 0.6in;
+    box-sizing: border-box;
+    color: #333;
+    font-family: 'Calibri', 'Arial', sans-serif;
+    line-height: 1.2; /* Even tighter line spacing */
+}
+  
+/*======================================
+  2. HEADER STYLING
+======================================*/
+/* Resume header with name and contact info - keeping this mostly the same */
+.resume-header {
+  text-align: center;
+  border-bottom: 1.5px solid #444;
+  padding-bottom: 0.3rem; /* Slightly reduced padding */
+  margin-bottom: 0.8rem; /* Reduced margin */
+  margin-top: 0; /* Ensure no top margin */
+}
+
+/* Name styling - keeping this mostly the same */
+.resume-name {
+  font-size: 1.5rem; /* Slightly smaller */
+  font-weight: bold;
+  margin: 0 0 0.3rem; /* Reduced bottom margin */
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Contact info - reduced size */
+.resume-contact-info {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.8rem; /* Reduced gap */
+  font-size: 0.7rem; /* 25% smaller */
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem; /* Reduced gap */
+}
+
+.contact-icon {
+  font-size: 0.8rem; /* Smaller icons */
+}
+
+/*======================================
+  3. SECTION STYLING
+======================================*/
+/* Content sections like Education, Experience */
+.resume-section {
+  margin-bottom: 0.75rem; /* Reduced margin by 25% */
+}
+
+.section-title {
+  font-size: 0.95rem; /* ~25% smaller */
+  font-weight: bold;
+  color: #222;
+  border-bottom: 1px solid #999;
+  padding-bottom: 0.1rem;
+  margin-bottom: 0.5rem; /* Reduced */
+  margin-top: 0;
+  text-transform: uppercase;
+}
+
+/*======================================
+  4. ENTRY STYLING
+======================================*/
+/* Education entry */
+.education-entry,
+.experience-entry {
+  margin-bottom: 0.7rem; /* Reduced margin */
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.2rem; /* Reduced margin */
+}
+
+.main-details {
+  flex: 3; /* Give more space to the main details */
+}
+
+.date-location {
+  flex: 1;
+  text-align: right;
+}
+
+.degree,
+.job-title {
+  font-size: 0.75rem; /* ~25% smaller */
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.school,
+.company {
+  font-size: 0.7rem; /* ~25% smaller */
+  font-weight: 600;
+  margin: 0.1rem 0 0; /* Reduced margin */
+  color: #444;
+}
+
+.date-range {
+  font-size: 0.65rem; /* ~25% smaller */
+  font-style: italic;
+  color: #555;
+}
+
+.location {
+  font-size: 0.65rem; /* ~25% smaller */
+  color: #666;
+  margin-top: 0.1rem; /* Reduced margin */
+}
+
+/*======================================
+  5. TEXT FORMATTING
+======================================*/
+/* Description text */
+.entry-description {
+  font-size: 0.65rem; /* ~25% smaller */
+  color: #333;
+  line-height: 1.3; /* Slightly tighter line spacing */
+  margin-top: 0.15rem; /* Reduced top margin */
+}
+
+/* Bullet point formatting */
+.description-bullets {
+  margin: 0;
+  padding-left: 0.75rem; /* Reduced padding */
+}
+
+.bullet-point {
+  position: relative;
+  margin-bottom: 0.1rem; /* Reduced margin */
+  line-height: 1.2; /* Tighter line spacing */
+}
+
+.bullet-point:before {
+  content: '•';
+  position: absolute;
+  left: -0.7rem; /* Adjusted position */
+  font-size: 0.65rem; /* Match text size */
+}
+
+.description-text {
+  margin: 0;
+  white-space: pre-line;
+}
+
+/* Jake's specific styles - matching his resume */
+.resume-document {
+  font-family: 'Calibri', 'Arial', sans-serif; /* Jake's resume uses Calibri */
+}
+
+.resume-name {
+  color: #000; /* Darker color for name */
+  letter-spacing: 0.5px; /* Slightly less letter spacing */
+}
+
+.section-title {
+  color: #000; /* Darker color for section titles */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Add more compact spacing for multiple entries */
+.education-entry + .education-entry,
+.experience-entry + .experience-entry {
+  margin-top: 0.5rem; /* Reduced spacing between multiple entries */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .entry-header {
+    flex-direction: column;
+  }
+  
+  .date-location {
+    text-align: left;
+    margin-top: 0.2rem; /* Reduced margin */
+  }
+}
+
+/* Print media query to ensure proper display in PDF */
+@media print {
+  .resume-document {
+    padding: 0.4in; /* Even smaller padding for print */
+    box-shadow: none;
+    min-height: auto;
+  }
+  
+  .resume-name {
+    font-size: 1.4rem;
+  }
+  
+  .section-title {
+    font-size: 0.9rem;
+  }
+}

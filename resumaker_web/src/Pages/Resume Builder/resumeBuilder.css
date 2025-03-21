@@ -35,6 +35,12 @@ html {
   overflow: hidden;
 }
 
+.builder-container > div:first-child {
+  flex: 1; /* Allow it to grow */
+  min-width: 40%; /* Prevent it from getting too small */
+  max-width: 50%; /* Prevent it from growing too large */
+  overflow-y: auto;
+}
 /* Builder Section (Left Half) */
 .builder-section {
   /* flex: 1; Take exactly half the space */
@@ -48,12 +54,15 @@ html {
 
 /* Preview Section (Right Half) */
 .preview-section {
-  flex: 1; /* Take exactly half the space */
-  max-width: 50%; /* Ensure it doesn't exceed half */
-  height: 80vh;
+  flex: 1; /* Allow it to grow */
+  min-width: 40%; /* Prevent it from getting too small */
+  height: 100vh;
+  overflow-y: auto;
+  position: relative;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
 }
 
 /* Preview Container */
@@ -61,7 +70,10 @@ html {
   display: flex;
   flex-direction: column;
   height: 80vh;
+  width: 100%;
   background-color: var(--background);
+  padding:0;
+  margin:0;
 }
 
 /* Make sure scrollbars don't affect layout */
@@ -104,6 +116,38 @@ html {
   }
 }
 
+/* Add this to your CSS */
+.bulletPointsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.bulletPointsLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.bulletPointWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bulletPoint {
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--text-color);
+  margin-top: -2px;
+}
+
+.bulletPointInput {
+  flex: 1;
+}
+
 /*---------------------Common Section Styles-------------------*/
 .personalInfoContainer,
 .educationContainer,
@@ -126,7 +170,7 @@ html {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-.sectionHeader {
+.sectionHeader, .sectionTitleInput {
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--text);
@@ -135,6 +179,8 @@ html {
   padding-bottom: 0.75rem;
   border-bottom: 2px solid var(--accent);
 }
+
+
 
 /*---------------------Form Elements-------------------*/
 .formGroup {
@@ -452,3 +498,45 @@ label {
 
 
 
+.addSectionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--accent, #0d6efd);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: auto;
+  margin: 1.5rem auto 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.addSectionButton:hover {
+  background-color: var(--accent-dark, #0250c5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.addSectionButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.addSectionButton svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Ensure the builder-section accommodates the button */
+.builder-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+}
