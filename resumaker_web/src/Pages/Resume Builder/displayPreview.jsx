@@ -20,8 +20,8 @@ export default function DisplayPreview({ resumeData = {} }) {
   const resumeRef = useRef(null);
   
   // Destructure the resumeData for easier access
-  const { personalInfo = {}, education = [], experience = [] } = resumeData;
-
+  // const { personalInfo = {}, education = [], experience = [] } = resumeData;
+  const { personalInfo, education, experience, customSections = [] } = resumeData;
   // Calculate page count whenever content changes
   useEffect(() => {
     if (!resumeRef.current) return;
@@ -323,6 +323,56 @@ export default function DisplayPreview({ resumeData = {} }) {
                     ))}
                   </div>
                 )}
+                {customSections.map((section) => (
+                  section.entries && section.entries.some(entry => entry.title.trim() !== '') && (
+                      <div key={section.id} className="resume-section">
+                          <h2 className="section-title">{section.title || 'Custom Section'}</h2>
+                          
+                          {section.entries.filter(entry => 
+                              entry.title && entry.title.trim() !== ''
+                          ).map((entry, index) => (
+                              <div key={entry.id || index} className="custom-entry">
+                                  <div className="entry-header">
+                                      <div className="main-details">
+                                          {entry.title && (
+                                              <h3 className="item-title">{entry.title}</h3>
+                                          )}
+                                          {entry.subtitle && (
+                                              <h4 className="item-subtitle">{entry.subtitle}</h4>
+                                          )}
+                                      </div>
+                                      
+                                      <div className="date-location">
+                                          {(entry.startDate || entry.endDate) && (
+                                              <div className="date-range">
+                                                  {entry.startDate}
+                                                  {entry.startDate && (entry.endDate || entry.isCurrentPosition) ? ' - ' : ''}
+                                                  {entry.isCurrentPosition ? 'Present' : entry.endDate}
+                                              </div>
+                                          )}
+                                          {entry.location && (
+                                              <div className="location">{entry.location}</div>
+                                          )}
+                                      </div>
+                                  </div>
+                                  
+                                  {/* Handle bullet points */}
+                                  {entry.bulletPoints && entry.bulletPoints.some(point => point && point.trim() !== '') && (
+                                      <div className="entry-description">
+                                          <ul className="description-bullets">
+                                              {entry.bulletPoints.map((point, i) => 
+                                                  point && point.trim() !== '' ? (
+                                                      <li key={i} className="bullet-point">{point}</li>
+                                                  ) : null
+                                              )}
+                                          </ul>
+                                      </div>
+                                  )}
+                              </div>
+                          ))}
+                      </div>
+                  )
+              ))}
               </>
             )}
           </div>
