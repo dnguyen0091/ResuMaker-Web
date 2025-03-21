@@ -1,59 +1,152 @@
-/* Preview area container */
+/*======================================
+  TABLE OF CONTENTS
+  
+  1. PDF PREVIEW VARIABLES
+  2. PREVIEW CONTAINER STRUCTURE
+  3. PDF PAPER STYLING
+  4. RESPONSIVE SCALING
+  5. PAGE INDICATORS
+  6. HEADER & CONTROLS
+  7. CONTENT OVERFLOW HANDLING
+  8. RESPONSIVE DESIGN
+======================================*/
+
+/*======================================
+  1. PDF PREVIEW VARIABLES
+======================================*/
+:root {
+  /* A4 Paper Dimensions */
+  --a4-width-px: 595px;       /* A4 width in pixels (at 72dpi) */
+  --a4-height-px: 842px;      /* A4 height in pixels (at 72dpi) */
+  --a4-margin-mm: 20mm;       /* Standard margin size */
+  --a4-aspect-ratio: 1/1.414; /* Width to height ratio */
+  
+  /* Preview Scaling */
+  --preview-scale: 0.8;       /* Default scale factor */
+  --preview-margin-adjust: -10%; /* Margin adjustment to compensate for scaling */
+  
+  /* Colors */
+  --preview-bg-color: #f2f2f2;
+  --paper-color: white;
+  --paper-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  --page-indicator-color: rgba(255, 0, 0, 0.3);
+}
+
+/*======================================
+  2. PREVIEW CONTAINER STRUCTURE 
+======================================*/
+/* Main preview container */
+.preview-container {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Preview area - scrollable content area */
 .preview-area {
   flex: 1;
   overflow: auto;
-  padding: 1.5rem;
-  background-color: #f2f2f2; /* Light gray background */
+  padding: 0.5rem;
+  background-color: var(--preview-bg-color);
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  height:80vh;
+  height: 80vh;
 }
 
-/* Wrapper for the resume document */
+/* Preview section - the whole right side */
+.preview-section {
+  flex: 1;
+  max-width: 50%;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/*======================================
+  3. PDF PAPER STYLING 
+======================================*/
+/* Resume wrapper - contains the paper */
 .resume-wrapper {
   position: relative;
-  width: min(100%, 595px); /* A4 width in pixels (595px = 210mm at 72dpi) */
-  height: min(100%, 842px); /* A4 height in pixels (842px = 297mm at 72dpi) */
+  width: min(100%, var(--a4-width-px));
   margin: 0 auto;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
-  /* Scale down the wrapper for better visibility */
-  transform: scale(0.8);
+  box-shadow: var(--paper-shadow);
+  transform: scale(var(--preview-scale));
   transform-origin: top center;
-  margin-top: -10%; /* Adjust to compensate for scaling */
+  margin-top: -5%; /* Reduced from -10% to -5% since we're reducing internal padding */
 }
 
 /* A4 paper styling */
 .a4-paper {
   position: relative;
-  background-color: white;
+  background-color: var(--paper-color);
   width: 100%;
-  aspect-ratio: 1/1.414; /* A4 aspect ratio (210/297) */
-  padding: 20mm; /* Standard 2cm margin */
+  aspect-ratio: var(--a4-aspect-ratio);
+  padding: var(--a4-margin-mm);
   box-sizing: border-box;
   font-family: 'Arial', sans-serif;
   color: #333;
   line-height: 1.5;
-  overflow: visible; /* Allow content to be visible even if it overflows */
+  overflow: visible;
 }
 
-/* Page indicator */
+/*======================================
+  4. RESPONSIVE SCALING
+======================================*/
+/* Define scale adjustments for different screen sizes */
+@media (max-width: 1440px) {
+  :root {
+    --preview-scale: 0.75;
+    --preview-margin-adjust: -12%;
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --preview-scale: 0.7;
+    --preview-margin-adjust: -15%;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --preview-scale: 0.65;
+    --preview-margin-adjust: -18%;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --preview-scale: 0.5;
+    --preview-margin-adjust: -25%;
+  }
+}
+
+/*======================================
+  5. PAGE INDICATORS
+======================================*/
+/* Page break indicator */
 .paper-size-indicator {
   position: absolute;
-  top: 297mm; /* Height of A4 */
+  top: var(--a4-height-px);
   left: 0;
   right: 0;
   height: 1px;
-  background-color: rgba(255, 0, 0, 0.3);
+  background-color: var(--page-indicator-color);
   z-index: 2;
   pointer-events: none;
 }
 
-/* When content exceeds one page, add subtle visual indicators */
+/* When content exceeds one page, add dashed line indicator */
 .resume-document::after {
   content: '';
   position: absolute;
-  top: 297mm; /* Height of A4 */
+  top: var(--a4-height-px);
   left: 0;
   right: 0;
   height: 1px;
@@ -68,208 +161,170 @@
   z-index: 2;
 }
 
-/* Preview section */
-.preview-section {
-  flex: 1;
-  max-width: 50%;
-  height: 80vh;
+/*======================================
+  6. HEADER & CONTROLS
+======================================*/
+/* Preview header with title and controls */
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: var(--card); /* Use card color from theme */
+  border-bottom: 1px solid var(--border); /* Use border color from theme */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Darker shadow for depth */
+  position: relative;
+  z-index: 10;
+}
+
+.preview-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--text); /* Use text color from theme */
+  font-weight: 600;
+}
+
+/* Container for buttons */
+.preview-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* Base styles for both buttons */
+.download-button,
+.saveButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.25rem;
+  background-color: var(--accent); /* Use accent color from theme */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow */
+}
+
+/* Button hover effect */
+.download-button:hover:not(:disabled),
+.saveButton:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--accent) 85%, white); /* Lighten accent color */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Darker shadow on hover */
+}
+
+/* Button active/pressed effect */
+.download-button:active:not(:disabled),
+.saveButton:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  background-color: color-mix(in srgb, var(--accent) 90%, black); /* Darken accent color when pressed */
+}
+
+/* Disabled state */
+.download-button:disabled {
+  background-color: color-mix(in srgb, var(--border) 70%, black); /* Darker gray for disabled in dark mode */
+  cursor: not-allowed;
+  opacity: 0.65;
+  box-shadow: none;
+}
+
+/* Consistent image sizing */
+.download-button img,
+.saveButton img {
+  width: 1.25rem;
+  height: 1.25rem;
+  object-fit: contain;
+  filter: brightness(0) invert(1); /* Make icons white */
+}
+
+/* Make sure the buttons don't get default button styling */
+.preview-header button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Add a subtle transition to the preview area */
+.preview-area {
+  transition: padding 0.3s ease;
+  background-color: var(--background); /* Use background color from theme */
+}
+
+/* Add a small hint text for actions */
+.preview-actions::after {
+  content: 'Download or save your resume';
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 1.5rem;
+  font-size: 0.75rem;
+  color: var(--secondary-text); /* Use secondary text color from theme */
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.preview-actions:hover::after {
+  opacity: 0.8; /* Slightly lower opacity for better contrast in dark mode */
+}
+
+
+
+
+/*======================================
+  7. CONTENT OVERFLOW HANDLING
+======================================*/
+/* Placeholder for empty resume */
+.resume-placeholder {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
-  overflow: hidden; /* Prevent preview from causing outer container overflow */
+  justify-content: center;
+  align-items: center;
+  color: #aaaaaa;
+  text-align: center;
+  border: 2px dashed #dddddd;
+  border-radius: 0.5rem;
+  min-height: 80%;
 }
 
-/* Preview container */
-.preview-container {
-  display: flex;
-  flex-direction: column;
-  height: 80vh;
-  /* max-height: 100vh; */
-  overflow: hidden;
+.resume-placeholder p {
+  margin: 0.5rem 0;
+  font-size: 1.5rem;
 }
 
-/* Responsive adjustments */
-@media (max-width: 1440px) {
-  .resume-wrapper {
-    transform: scale(0.75);
-    margin-top: -12%;
-  }
+.placeholder-hint {
+  font-size: 1rem !important;
+  opacity: 0.7;
 }
 
+/*======================================
+  8. RESPONSIVE DESIGN
+======================================*/
+/* Layout adjustments for mobile */
 @media (max-width: 1024px) {
-  .resume-wrapper {
-    transform: scale(0.7);
-    margin-top: -15%;
-  }
-}
-
-@media (max-width: 768px) {
   .builder-container {
     flex-direction: column;
   }
   
-  .builder-section,
-  .preview-section {
-    max-width: 100%;
-    height: auto;
-  }
-  
-  .preview-section {
-    height: 100vh;
-    max-height: 100vh;
-  }
-  
-  .resume-wrapper {
-    transform: scale(0.65);
-    margin-top: -18%;
-  }
-}
-
-@media (max-width: 480px) {
-  .resume-wrapper {
-    transform: scale(0.5);
-    margin-top: -25%;
-  }
-}
-
-
-
-/* Preview Container and Layout */
-  
-  .preview-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    background-color: var(--card);
-    border-bottom: 1px solid var(--border);
-  }
-  
-  .preview-header h2 {
-    margin: 0;
-    color: var(--text);
-    font-size: 1.25rem;
-  }
-  
-  .download-button {
-    background-color: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 0.25rem;
-    padding: 0.5rem 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .download-button:hover:not(:disabled) {
-    filter: brightness(1.1);
-  }
-  
-  .download-button:disabled {
-    background-color: var(--border);
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-  
-  .preview-area {
-    flex: 1;
-    overflow: auto;
-    padding: 1.5rem;
-    background-color: #f5f5f5;
-  }
-  
-  .resume-wrapper {
+  .builder-section, .preview-section {
+    flex: none;
     width: 100%;
-    max-width: 8.5in;
-    height: fit-content;
-    margin: 0 auto;
-  }
-  
-  /* Placeholder styles - shown when no data is entered */
-  .resume-placeholder {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: #aaaaaa;
-    text-align: center;
-    border: 2px dashed #dddddd;
-    border-radius: 0.5rem;
-    min-height: 80%;
-  }
-  
-  .resume-placeholder p {
-    margin: 0.5rem 0;
-    font-size: 1.5rem;
-  }
-  
-  .placeholder-hint {
-    font-size: 1rem !important;
-    opacity: 0.7;
-  }
-  
-  /* Builder Container Layout */
-  .builder-container {
-    display: flex;
-    flex-direction: row;
-    height: 100%;
-    background-color: var(--background);
-    border-radius: 0.5rem;
-    overflow: hidden;
+    height: auto;
+    min-height: 50vh;
   }
   
   .builder-section {
-    flex: 1;
-    height: 100%;
-    overflow-y: auto;
-    padding: 1.5rem;
-    border-right: 1px solid var(--border);
+    border-right: none;
+    border-bottom: 1px solid var(--border);
   }
   
-  .preview-section {
-    flex: 1;
-    height: 100%;
+  .resume-contact-info {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
   }
-  
-  /* Responsive layout adjustments */
-  @media (max-width: 1024px) {
-    .builder-container {
-        flex-direction: column;
-    }
-    
-    .builder-section, .preview-section {
-        flex: none;
-        width: 100%;
-        height: auto;
-        min-height: 50vh;
-    }
-    
-    .builder-section {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-    }
-    
-    .resume-contact-info {
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-    }
-  }
-  
-  
-  /* Resume Content Sections */
-  .resume-section {
-    margin-bottom: 1.5rem;
-  }
-  
-  .section-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #222;
-    border-bottom: 1px solid #999;
-    padding-bottom: 0.25rem;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-  }
+}
