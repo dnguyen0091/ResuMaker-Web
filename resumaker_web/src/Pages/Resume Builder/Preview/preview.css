@@ -39,6 +39,7 @@
 .preview-container {
   display: flex;
   flex-direction: column;
+  width:100%;
   height: 80vh;
   overflow: hidden;
   position: relative;
