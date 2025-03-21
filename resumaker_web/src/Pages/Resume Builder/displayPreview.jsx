@@ -300,7 +300,21 @@ export default function DisplayPreview({ resumeData = {} }) {
                           </div>
                         </div>
                         
-                        {exp.description && (
+                        {/* Handle bullet points */}
+                        {exp.bulletPoints && exp.bulletPoints.some(point => point && point.trim() !== '') && (
+                          <div className="entry-description">
+                            <ul className="description-bullets">
+                              {exp.bulletPoints.map((point, i) => 
+                                point && point.trim() !== '' ? (
+                                  <li key={i} className="bullet-point">{point}</li>
+                                ) : null
+                              )}
+                            </ul>
+                          </div>
+                        )}
+                        
+                        {/* Backward compatibility for description field */}
+                        {!exp.bulletPoints && exp.description && (
                           <div className="entry-description">
                             {formatDescription(exp.description)}
                           </div>

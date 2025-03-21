@@ -1,4 +1,45 @@
+import React, { useEffect, useState } from 'react';
+import starIcon from '../../../assets/Icons/stars.svg';
+
 export default function Experience({ experienceList, setExperienceList }) {
+    const [reviewingId, setReviewingId] = useState(null);
+
+    // AI review function for experience
+    const reviewAI = (experienceId) => {
+        // Set the reviewing state to show loading indicator
+        setReviewingId(experienceId);
+        
+        const experience = experienceList.find(item => item.id === experienceId);
+        const bulletPoints = experience.bulletPoints;
+        
+        // Simulate AI generation (replace with actual API call)
+        setTimeout(() => {
+            // Example AI-generated content based on the existing entry
+            const title = experience.title || "position";
+            const company = experience.company || "company";
+            
+            // Update the entry with AI suggestions
+            setExperienceList(
+                experienceList.map(item => {
+                    if (item.id === experienceId) {
+                        return {
+                            ...item,
+                            bulletPoints: [
+                                `Led key initiatives that increased efficiency by 25% for ${company}'s core processes`,
+                                `Collaborated with cross-functional teams to deliver projects on time and within budget`,
+                                `Implemented innovative solutions that gained recognition from senior leadership`
+                            ]
+                        };
+                    }
+                    return item;
+                })
+            );
+            
+            // Clear the reviewing state
+            setReviewingId(null);
+        }, 1500);
+    };
+    
     // Add a new experience entry
     const addExperience = () => {
         const newId = experienceList.length > 0 
@@ -15,7 +56,7 @@ export default function Experience({ experienceList, setExperienceList }) {
                 startDate: '',
                 endDate: '',
                 isCurrentPosition: false,
-                description: ''
+                bulletPoints: ['', '', ''] // Using bullet points instead of description
             }
         ]);
     };
@@ -47,6 +88,58 @@ export default function Experience({ experienceList, setExperienceList }) {
         );
     };
 
+    // Update a specific bullet point
+    const updateBulletPoint = (experienceId, index, value) => {
+        setExperienceList(
+            experienceList.map(item => {
+                if (item.id === experienceId) {
+                    const updatedBulletPoints = [...(item.bulletPoints || ['', '', ''])];
+                    updatedBulletPoints[index] = value;
+                    return { ...item, bulletPoints: updatedBulletPoints };
+                }
+                return item;
+            })
+        );
+    };
+
+    // Convert existing descriptions to bullet points if needed
+    const ensureBulletPoints = () => {
+        setExperienceList(
+            experienceList.map(item => {
+                if (!item.bulletPoints && item.description) {
+                    // Split description by bullet points, newlines, or create empty bullet points
+                    const description = item.description || '';
+                    let points = [];
+                    
+                    if (description.includes('•')) {
+                        points = description.split('•')
+                            .map(point => point.trim())
+                            .filter(point => point !== '');
+                    } else if (description.includes('\n')) {
+                        points = description.split('\n')
+                            .map(point => point.trim())
+                            .filter(point => point !== '');
+                    }
+                    
+                    // Ensure we have at least 3 bullet points (even if empty)
+                    while (points.length < 3) {
+                        points.push('');
+                    }
+                    
+                    return { ...item, bulletPoints: points, description: undefined };
+                } else if (!item.bulletPoints) {
+                    return { ...item, bulletPoints: ['', '', ''] };
+                }
+                return item;
+            })
+        );
+    };
+
+    // Ensure bullet points are initialized on component mount
+    useEffect(() => {
+        ensureBulletPoints();
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
     return (
         <div className="experienceContainer">
             <p className="sectionHeader">Work Experience</p>
@@ -56,7 +149,24 @@ export default function Experience({ experienceList, setExperienceList }) {
                     {index > 0 && <div className="entrySeparator"></div>}
                     
                     <div className="entryHeader">
-                        <h3 className="entryTitle">Experience #{index + 1}</h3>
+                        <div className="headerTitleGroup">
+                            <h3 className="entryTitle">Experience #{index + 1}</h3>
+                            <button 
+                                className={`aiButton ${reviewingId === exp.id ? 'generating' : ''}`}
+                                title="Generate content with AI"
+                                onClick={() => reviewAI(exp.id)}
+                                disabled={reviewingId !== null}
+                            >
+                                {reviewingId === exp.id ? (
+                                    <div className="loadingIndicator"></div>
+                                ) : (
+                                    <>
+                                        <img src={starIcon} alt="AI" />
+                                        <span className="aiTooltip">Generate with AI</span>
+                                    </>
+                                )}
+                            </button>
+                        </div>
                         {experienceList.length > 1 && (
                             <button 
                                 className="removeButton" 
@@ -148,21 +258,49 @@ export default function Experience({ experienceList, setExperienceList }) {
                         </div>
                     </div>
                     
-                    <div className="textareaWrapper">
-                        <label htmlFor={`description-${exp.id}`}>
-                            Description (responsibilities, achievements, etc.)
+                    <div className="bulletPointsContainer">
+                        <label className="bulletPointsLabel">
+                            Responsibilities & Achievements
                         </label>
-                        <textarea 
-                            id={`description-${exp.id}`}
-                            className="textarea" 
-                            value={exp.description}
-                            onChange={(e) => updateExperience(exp.id, 'description', e.target.value)}
-                            placeholder="• Led the development of a new product feature that increased user engagement by 30%
-• Collaborated with cross-functional teams to deliver projects on time and within budget
-• Implemented automated testing that reduced QA time by 25%"
-                            rows={4}
-                        ></textarea>
-                        <p className="helperText">Use bullet points (•) to separate different responsibilities or achievements</p>
+                        
+                        {/* Bullet Point 1 */}
+                        <div className="bulletPointWrapper">
+                            <span className="bulletPoint">•</span>
+                            <input 
+                                id={`bulletPoint1-${exp.id}`}
+                                className="input bulletPointInput" 
+                                type="text" 
+                                value={exp.bulletPoints?.[0] || ''}
+                                onChange={(e) => updateBulletPoint(exp.id, 0, e.target.value)}
+                                placeholder="Ex: Led development of new features that increased user engagement by 30%" 
+                            />
+                        </div>
+                        
+                        {/* Bullet Point 2 */}
+                        <div className="bulletPointWrapper">
+                            <span className="bulletPoint">•</span>
+                            <input 
+                                id={`bulletPoint2-${exp.id}`}
+                                className="input bulletPointInput" 
+                                type="text" 
+                                value={exp.bulletPoints?.[1] || ''}
+                                onChange={(e) => updateBulletPoint(exp.id, 1, e.target.value)}
+                                placeholder="Ex: Collaborated with cross-functional teams to deliver projects on time" 
+                            />
+                        </div>
+                        
+                        {/* Bullet Point 3 */}
+                        <div className="bulletPointWrapper">
+                            <span className="bulletPoint">•</span>
+                            <input 
+                                id={`bulletPoint3-${exp.id}`}
+                                className="input bulletPointInput" 
+                                type="text" 
+                                value={exp.bulletPoints?.[2] || ''}
+                                onChange={(e) => updateBulletPoint(exp.id, 2, e.target.value)}
+                                placeholder="Ex: Implemented automated testing that reduced QA time by 25%" 
+                            />
+                        </div>
                     </div>
                 </div>
             ))}
@@ -171,6 +309,7 @@ export default function Experience({ experienceList, setExperienceList }) {
                 className="addButton"
                 onClick={addExperience}
                 type="button"
+                disabled={reviewingId !== null}
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="12" y1="5" x2="12" y2="19"></line>

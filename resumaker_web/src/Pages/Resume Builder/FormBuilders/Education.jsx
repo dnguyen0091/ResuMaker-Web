@@ -98,9 +98,16 @@ export default function Education({ educationList, setEducationList }) {
                             className="aiButton" 
                             title="Generate content with AI"
                             onClick={() => reviewAI(edu.id)}
+                            disabled={reviewing !== null}
                             >
-                            <img src={starIcon} alt="AI" />
-                            <span className="aiTooltip">Generate with AI</span>
+                            {reviewing === edu.id ? (
+                                <div className="loadingIndicator"></div>
+                            ) : (
+                                <>
+                                    <img src={starIcon} alt="AI" />
+                                    <span className="aiTooltip">Generate with AI</span>
+                                </>
+                                )}
                             </button>
                         </div>
                         {educationList.length > 1 && (
