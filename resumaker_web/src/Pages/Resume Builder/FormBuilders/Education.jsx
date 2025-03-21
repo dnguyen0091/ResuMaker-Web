@@ -1,7 +1,16 @@
 import React from 'react';
-
-
+import starIcon from '../../../assets/Icons/stars.svg';
 export default function Education({ educationList, setEducationList }) {
+    const [reviewing, setReviewingId] = React.useState(false);
+    const reviewAI = (educationId) => {
+        // AI function to review the education section
+        setReviewingId(educationId);
+        
+        const education = educationList.find(item => item.id === educationId);
+        const bulletPoints= education.bulletPoints;
+
+        //Make API call here
+    };
     // Add a new education entry
     const addEducation = () => {
         const newId = educationList.length > 0 
@@ -18,7 +27,7 @@ export default function Education({ educationList, setEducationList }) {
                 fieldOfStudy: '',
                 startDate: '',
                 endDate: '',
-                description: ''
+                bulletPoints: ['', '']
             }
         ]);
     };
@@ -37,7 +46,42 @@ export default function Education({ educationList, setEducationList }) {
             )
         );
     };
+    
+    // Update a specific bullet point
+    const updateBulletPoint = (educationId, index, value) => {
+        setEducationList(
+            educationList.map(item => {
+                if (item.id === educationId) {
+                    const updatedBulletPoints = [...(item.bulletPoints || ['', ''])];
+                    updatedBulletPoints[index] = value;
+                    return { ...item, bulletPoints: updatedBulletPoints };
+                }
+                return item;
+            })
+        );
+    };
 
+    // Convert existing descriptions to bullet points if needed
+    const ensureBulletPoints = () => {
+        setEducationList(
+            educationList.map(item => {
+                if (!item.bulletPoints && item.description) {
+                    // Split description by newlines or create empty bullet points
+                    const lines = item.description.split('\n').filter(line => line.trim());
+                    const bulletPoints = lines.length > 0 ? lines : ['', ''];
+                    return { ...item, bulletPoints, description: undefined };
+                } else if (!item.bulletPoints) {
+                    return { ...item, bulletPoints: ['', ''] };
+                }
+                return item;
+            })
+        );
+    };
+
+    // Ensure bullet points are initialized on component mount
+    React.useEffect(() => {
+        ensureBulletPoints();
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className="educationContainer">
@@ -48,17 +92,27 @@ export default function Education({ educationList, setEducationList }) {
                     {index > 0 && <div className="entrySeparator"></div>}
                     
                     <div className="entryHeader">
-                        <h3 className="entryTitle">Education #{index + 1}</h3>
+                        <div className="headerTitleGroup">
+                            <h3 className="entryTitle">Education #{index + 1}</h3>
+                            <button 
+                            className="aiButton" 
+                            title="Generate content with AI"
+                            onClick={() => reviewAI(edu.id)}
+                            >
+                            <img src={starIcon} alt="AI" />
+                            <span className="aiTooltip">Generate with AI</span>
+                            </button>
+                        </div>
                         {educationList.length > 1 && (
                             <button 
-                                className="removeButton" 
-                                onClick={() => removeEducation(edu.id)}
-                                aria-label="Remove education entry"
+                            className="removeButton" 
+                            onClick={() => removeEducation(edu.id)}
+                            aria-label="Remove education entry"
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                                </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
                             </button>
                         )}
                     </div>
@@ -137,18 +191,36 @@ export default function Education({ educationList, setEducationList }) {
                         </div>
                     </div>
                     
-                    <div className="textareaWrapper">
-                        <label htmlFor={`description-${edu.id}`}>
+                    <div className="bulletPointsContainer">
+                        <label className="bulletPointsLabel">
                             Additional Information (achievements, activities, etc.)
                         </label>
-                        <textarea 
-                            id={`description-${edu.id}`}
-                            className="textarea" 
-                            value={edu.description}
-                            onChange={(e) => updateEducation(edu.id, 'description', e.target.value)}
-                            placeholder="Ex: Dean's List 2019-2022, President of Computer Science Club, Coursework included Machine Learning and Software Engineering"
-                            rows={3}
-                        ></textarea>
+                        
+                        {/* Bullet Point 1 */}
+                        <div className="bulletPointWrapper">
+                            <span className="bulletPoint">•</span>
+                            <input 
+                                id={`bulletPoint1-${edu.id}`}
+                                className="input bulletPointInput" 
+                                type="text" 
+                                value={edu.bulletPoints?.[0] || ''}
+                                onChange={(e) => updateBulletPoint(edu.id, 0, e.target.value)}
+                                placeholder="Ex: Dean's List 2019-2022" 
+                            />
+                        </div>
+                        
+                        {/* Bullet Point 2 */}
+                        <div className="bulletPointWrapper">
+                            <span className="bulletPoint">•</span>
+                            <input 
+                                id={`bulletPoint2-${edu.id}`}
+                                className="input bulletPointInput" 
+                                type="text" 
+                                value={edu.bulletPoints?.[1] || ''}
+                                onChange={(e) => updateBulletPoint(edu.id, 1, e.target.value)}
+                                placeholder="Ex: President of Computer Science Club" 
+                            />
+                        </div>
                     </div>
                 </div>
             ))}
