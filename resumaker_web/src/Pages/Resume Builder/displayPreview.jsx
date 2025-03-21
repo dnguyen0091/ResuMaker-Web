@@ -110,7 +110,10 @@ export default function DisplayPreview({ resumeData = {} }) {
       setIsGenerating(false);
     }
   };
-
+  const savePDF = async () => {
+    //Connect to the backend to save the pdf
+    console.log("Save PDF Clicked");
+  };
   // Check if there's any personal info data to display
   const hasPersonalInfo = personalInfo && Object.values(personalInfo).some(value => value && value.trim && value.trim() !== '');
   
@@ -151,14 +154,8 @@ export default function DisplayPreview({ resumeData = {} }) {
       <div className="preview-header">
         <h2>Resume Preview</h2>
         <div className="preview-actions">
-          <button className="saveButton"><img src={saveIcon} alt="Save" /></button>
-          <button 
-            className="download-button"
-            onClick={downloadPDF}
-            disabled={isGenerating}
-          ><img src={downloadIcon} alt="download" />
-            {/* {isGenerating ? 'Generating...' : 'Download PDF'} */}
-          </button>
+          <button className="saveButton" onClick={savePDF}><img src={saveIcon} alt="Save" /></button>
+          <button className="download-button" onClick={downloadPDF} disabled={isGenerating}><img src={downloadIcon} alt="download" />{/* {isGenerating ? 'Generating...' : 'Download PDF'} */}</button>
         </div>
       </div>
       
@@ -245,7 +242,21 @@ export default function DisplayPreview({ resumeData = {} }) {
                           </div>
                         </div>
                         
-                        {edu.description && (
+                        {/* Handle bullet points */}
+                        {edu.bulletPoints && edu.bulletPoints.some(point => point && point.trim() !== '') && (
+                          <div className="entry-description">
+                            <ul className="description-bullets">
+                              {edu.bulletPoints.map((point, i) => 
+                                point && point.trim() !== '' ? (
+                                  <li key={i} className="bullet-point">{point}</li>
+                                ) : null
+                              )}
+                            </ul>
+                          </div>
+                        )}
+                        
+                        {/* Backward compatibility for description field */}
+                        {!edu.bulletPoints && edu.description && (
                           <div className="entry-description">
                             {formatDescription(edu.description)}
                           </div>

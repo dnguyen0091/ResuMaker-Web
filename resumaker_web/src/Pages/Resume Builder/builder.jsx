@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import DisplayPreview from './displayPreview';
+import CustomSection from './FormBuilders/CustomSection';
 import Education from './FormBuilders/Education';
 import Experience from './FormBuilders/Experience';
 import PersonalInfo from './FormBuilders/PersonalInfo';
-import DisplayPreview from './displayPreview';
 import './resumeBuilder.css';
 
 export default function Builder() {
@@ -23,7 +24,7 @@ export default function Builder() {
             fieldOfStudy: '',
             startDate: '',
             endDate: '',
-            description: ''
+            bulletPoints: ['', '']
         }
     ]);
     
@@ -72,6 +73,7 @@ export default function Builder() {
                         experienceList={experienceList}
                         setExperienceList={setExperienceList}
                     />
+                    <CustomSection />
                 </div>
                 
                 <div className="preview-section">
