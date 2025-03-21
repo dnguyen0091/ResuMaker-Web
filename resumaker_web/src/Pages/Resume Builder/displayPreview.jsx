@@ -1,10 +1,14 @@
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import React, { useEffect, useRef, useState } from 'react';
+import downloadIcon from '../../assets/Icons/download.svg';
+import saveIcon from '../../assets/Icons/save.svg';
 import './Preview/Custom.css';
 import './Preview/EducationExperience.css';
 import './Preview/preview.css';
+import './Preview/resumeContent.css';
 import './resumeBuilder.css';
+
 /**
  * A PDF preview component that updates in real-time as the user inputs data
  * @param {Object} resumeData - The resume data from the builder form
@@ -147,17 +151,13 @@ export default function DisplayPreview({ resumeData = {} }) {
       <div className="preview-header">
         <h2>Resume Preview</h2>
         <div className="preview-actions">
-          {pageCount > 1 && (
-            <div className="page-indicator">
-              <span>Approximately {pageCount} pages</span>
-            </div>
-          )}
+          <button className="saveButton"><img src={saveIcon} alt="Save" /></button>
           <button 
             className="download-button"
             onClick={downloadPDF}
             disabled={isGenerating}
-          >
-            {isGenerating ? 'Generating...' : 'Download PDF'}
+          ><img src={downloadIcon} alt="download" />
+            {/* {isGenerating ? 'Generating...' : 'Download PDF'} */}
           </button>
         </div>
       </div>
