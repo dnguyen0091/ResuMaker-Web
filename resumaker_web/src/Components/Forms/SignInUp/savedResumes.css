@@ -1,0 +1,126 @@
+/* Modal container */
+.savedResumes {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--secondary-color, #2c3e50);
+    color: #f1f1f1;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 800px;
+    max-height: 85vh;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Title styling */
+.savedResumes #title {
+    margin: 0 0 1rem;
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: bold;
+}
+
+/* Close button styling */
+.close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    font-size: 1.8rem;
+    color: #fff;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s, transform 0.2s;
+    z-index: 1001;
+}
+
+.close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* Resume list grid */
+.resumeList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    padding: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+}
+
+/* Scrollbar for Webkit browsers */
+.resumeList::-webkit-scrollbar {
+    width: 6px;
+}
+
+.resumeList::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.resumeList::-webkit-scrollbar-thumb {
+    background-color: rgba(155, 155, 155, 0.5);
+    border-radius: 10px;
+}
+
+.resumeList::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(155, 155, 155, 0.8);
+}
+
+/* Resume card styling */
+.resumeCard {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    background-color: #fff;
+    color: #333;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.resumeCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.resumeCard h2 {
+    font-size: 1.4rem;
+    margin: 0 0 0.5rem;
+}
+
+.resumeCard p {
+    font-size: 0.95rem;
+    margin: 0.5rem 0;
+}
+
+.resumeCard button {
+    background-color: var(--accent, #4a90e2);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.6rem 1rem;
+    margin-top: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.resumeCard button:hover {
+    background-color: var(--accent-dark, #3a75c4);
+}
