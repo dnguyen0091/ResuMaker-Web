@@ -18,91 +18,74 @@ export default function DisplayPreview({ resumeData = {} }) {
   const [contentHeight, setContentHeight] = useState(0);
   const [pageCount, setPageCount] = useState(1);
   const resumeRef = useRef(null);
-  
-  // Destructure the resumeData for easier access
-  // const { personalInfo = {}, education = [], experience = [] } = resumeData;
   const { personalInfo, education, experience, customSections = [] } = resumeData;
+
   // Calculate page count whenever content changes
   useEffect(() => {
     if (!resumeRef.current) return;
-    
-    // Get the height of the content
     const height = resumeRef.current.scrollHeight;
     setContentHeight(height);
-    
-    // Calculate number of pages based on A4 dimensions
-    // A4 is 210mm × 297mm, with 1in margins that's roughly 160mm × 247mm usable space
-    // We need to calculate based on the current width to get proportion right
     const contentWidth = resumeRef.current.clientWidth;
-    const a4Ratio = 210 / 297; // width / height
-    const contentRatio = contentWidth / height;
-    
-    // This calculation gives us approximate page count based on content area
+    const a4Ratio = 210 / 297;
     const estimatedPages = Math.ceil(height / (contentWidth / a4Ratio));
     setPageCount(estimatedPages);
   }, [resumeData]);
 
-  /**
-   * Generates and downloads a PDF of the current preview content
-   */
+  // Common PDF generation logic
+  const generatePDF = async () => {
+    if (!resumeRef.current) throw new Error('No resume content found');
+    
+    const canvas = await html2canvas(resumeRef.current, {
+      scale: 2,
+      backgroundColor: '#FFFFFF',
+      height: resumeRef.current.scrollHeight,
+    });
+    
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+    });
+    
+    const imgWidth = 210; // A4 width in mm
+    const pageHeight = 297; // A4 height in mm
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    
+    if (imgHeight > pageHeight) {
+      let heightLeft = imgHeight;
+      let position = 0;
+      let page = 1;
+      
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+      
+      while (heightLeft > 0) {
+        position = -pageHeight * page;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+        page++;
+      }
+    } else {
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+    }
+    
+    return pdf;
+  };
+
   const downloadPDF = async () => {
     if (!resumeRef.current) return;
     
     try {
       setIsGenerating(true);
+      const pdf = await generatePDF();
       
-      // Generate PDF using html2canvas and jsPDF
-      const canvas = await html2canvas(resumeRef.current, {
-        scale: 2, // Higher scale for better quality
-        backgroundColor: '#FFFFFF',
-        // Capture the full height, even if it overflows
-        height: resumeRef.current.scrollHeight
-      });
-      
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4',
-      });
-      
-      // Calculate dimensions to fit the content properly on the PDF
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = 297; // A4 height in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
-      // Check if we need multiple pages
-      if (imgHeight > pageHeight) {
-        // Multi-page PDF required
-        let heightLeft = imgHeight;
-        let position = 0;
-        let page = 1;
-        
-        // Add first page
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-        
-        // Add subsequent pages as needed
-        while (heightLeft > 0) {
-          position = -pageHeight * page;
-          pdf.addPage();
-          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
-          page++;
-        }
-      } else {
-        // Single page PDF
-        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-      }
-      
-      // Generate a filename with the person's name if available
-      const fileName = personalInfo.name 
+      const fileName = personalInfo?.name 
         ? `${personalInfo.name.replace(/\s+/g, '_')}_Resume_${new Date().toISOString().slice(0, 10)}.pdf`
         : `MyResume_${new Date().toISOString().slice(0, 10)}.pdf`;
       
-      // Download the PDF
-      pdf.save(fileName);
-      
+      pdf.save(fileName); // Trigger download
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert('Failed to generate PDF. Please try again.');
@@ -110,9 +93,44 @@ export default function DisplayPreview({ resumeData = {} }) {
       setIsGenerating(false);
     }
   };
+
   const savePDF = async () => {
-    //Connect to the backend to save the pdf
     console.log("Save PDF Clicked");
+    
+    try {
+      setIsGenerating(true);
+      const pdf = await generatePDF();
+      
+      // Convert jsPDF output to a Blob
+      const pdfBlob = pdf.output('blob');
+      const fileName = personalInfo?.name 
+        ? `${personalInfo.name.replace(/\s+/g, '_')}_Resume_${new Date().toISOString().slice(0, 10)}.pdf`
+        : `MyResume_${new Date().toISOString().slice(0, 10)}.pdf`;
+      
+      const API_URL = 'https://resumaker-api.onrender.com';
+      const formData = new FormData();
+      // Assuming you stored the user's email globally (e.g. in localStorage)
+      const userEmail = localStorage.getItem('userEmail') || '';
+      formData.append('email', userEmail);
+      formData.append('resume', pdfBlob, fileName);
+      
+      const response = await fetch(`${API_URL}/api/resume/upload-resume`, {
+        method: 'POST',
+        body: formData,
+      });
+      
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Resume upload failed');
+      }
+      
+      return data;
+      
+    } catch (error) {
+      console.error('Error saving PDF:', error);
+    } finally {
+      setIsGenerating(false);
+    }
   };
   // Check if there's any personal info data to display
   const hasPersonalInfo = personalInfo && Object.values(personalInfo).some(value => value && value.trim && value.trim() !== '');
