@@ -47,6 +47,10 @@ export default function NavBar() {
         navigate('/resume-analyzer');
     };
 
+    const handleCreditsClick = () => {
+        navigate('/credits');
+    }
+
     return (
         // Container for "Pill Nav Bar"
         <div className="nav-bar">
@@ -56,6 +60,7 @@ export default function NavBar() {
                 
             <button className="buttonPage" onClick={handleResumeAnalyzerClick}>Resume Analyzer</button>
             
+            <button className="buttonPage" onClick={handleCreditsClick}>Credits</button>
             <div className="profile-container" ref={dropdownRef}>
                 <button 
                     className="profile-button" 
