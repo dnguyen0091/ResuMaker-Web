@@ -3,6 +3,7 @@ import '../index.css';
 import MainLayout from '../Layouts/MainLayout';
 import NoLayout from '../Layouts/NoLayout';
 import './App.css';
+import Credits from './Credits/credits';
 import HomePage from './homepage/HomePage';
 import Landing from './landing/landing';
 import ResumeAnalyzer from './Resume Analyzer/resumeAnalyzer';
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/landing" element={<Landing />} />
           <Route path="/resume-builder" element={<ResumeBuilder />} />
           <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
+          <Route path="/credits" element={<Credits/>}/>
         </Route>
 
         {/* Routes without global layout */}
