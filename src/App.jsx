@@ -13,7 +13,7 @@ import AuthPage from './pages/AuthPage';
 
 
 //My imports
-import HomePage from './Pages/HomePage';
+import HomePage from './pages/HomePage';
 export default function App() {
   return (
     <AuthProvider>
