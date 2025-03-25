@@ -12,6 +12,8 @@ import ResumeBuilder from './pages/Resume Builder/ResumeBuilder';
 import AuthPage from './pages/AuthPage';
 
 
+//My imports
+import HomePage from './Pages/HomePage';
 export default function App() {
   return (
     <AuthProvider>
