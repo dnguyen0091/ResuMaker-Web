@@ -1,0 +1,267 @@
+/* Education and Experience Entries - scaled down by ~25% */
+.education-entry,
+.experience-entry {
+  margin-bottom: 0.7rem; /* Reduced from 1.25rem */
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.2rem; /* Reduced from 0.5rem */
+}
+
+.main-details {
+  flex: 3; /* Increased ratio to give more space to details */
+}
+
+.date-location {
+  flex: 1;
+  text-align: right;
+}
+
+.degree,
+.job-title {
+  font-size: 0.75rem; /* Reduced from 1.1rem */
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.school,
+.company {
+  font-size: 0.7rem; /* Reduced from 1rem */
+  font-weight: 600;
+  margin: 0.1rem 0 0; /* Reduced from 0.25rem */
+  color: #444;
+}
+
+.date-range {
+  font-size: 0.65rem; /* Reduced from 0.9rem */
+  font-style: italic;
+  color: #555;
+}
+
+.location {
+  font-size: 0.65rem; /* Reduced from 0.9rem */
+  color: #666;
+  margin-top: 0.1rem; /* Reduced from 0.25rem */
+}
+
+.entry-description {
+  font-size: 0.65rem; /* Reduced from 0.9rem */
+  color: #333;
+  line-height: 1.2; /* Reduced from 1.5 */
+  margin-top: 0.15rem; /* Added top margin */
+}
+
+/* Bullet Point Formatting - scaled down */
+.description-bullets {
+  margin: 0;
+  padding-left: 0.75rem; /* Reduced from 1.25rem */
+}
+
+.bullet-point {
+  position: relative;
+  margin-bottom: 0.1rem; /* Reduced from 0.25rem */
+  line-height: 1.2; /* Reduced from 1.4 */
+}
+
+.bullet-point:before {
+  content: '•';
+  position: absolute;
+  left: -0.7rem; /* Reduced from -1.25rem */
+  font-size: 0.65rem; /* Match text size */
+}
+
+.description-text {
+  margin: 0;
+  white-space: pre-line;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .entry-header {
+    flex-direction: column;
+  }
+  
+  .date-location {
+    text-align: left;
+    margin-top: 0.2rem; /* Reduced from 0.5rem */
+  }
+}
+
+/* Equal spacing between sections - reduced */
+.resume-section + .resume-section {
+  margin-top: 0.9rem; /* Reduced from 2rem */
+}
+
+/* More compact styling for the overall document */
+.resume-document {
+  line-height: 1.2; /* Reduced from 1.6 */
+}
+
+/* Additional space-saving adjustments */
+.education-entry + .education-entry,
+.experience-entry + .experience-entry {
+  margin-top: 0.5rem; /* Add spacing between multiple entries */
+}
+
+/* Optimize for multi-column layout when appropriate */
+@media print {
+  .entry-description ul {
+    column-count: 2;
+    column-gap: 1rem;
+  }
+  
+  /* Only apply columns if there are 4+ bullet points */
+  .entry-description ul:not(:has(li:nth-child(4))) {
+    column-count: 1;
+  }
+}
+
+/* Header title group to keep title and AI button together */
+.headerTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* AI Button Styling */
+.aiButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.aiButton img {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+/* Tooltip for AI button */
+.aiTooltip {
+  position: absolute;
+  background-color: #343541;
+  color: white;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 10;
+}
+
+/* Create a small arrow for the tooltip */
+.aiTooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #343541 transparent transparent transparent;
+}
+
+/* Hover effects */
+.aiButton:hover {
+  background-color: rgba(25, 195, 125, 0.1); /* Light green background on hover */
+}
+
+.aiButton:hover img {
+  transform: rotate(20deg) scale(1.1); /* Rotate and scale the star icon */
+}
+
+.aiButton:hover .aiTooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Active/Pressed state */
+.aiButton:active {
+  background-color: rgba(25, 195, 125, 0.2); /* Darker green when pressed */
+}
+
+.aiButton:active img {
+  transform: rotate(0deg) scale(0.95); /* Return to normal rotation but slightly smaller */
+}
+
+/* Entry Header layout */
+.entryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* Maintain consistent space with or without the remove button */
+.entryTitle {
+  margin: 0;
+  padding-right: 5px;
+}
+
+/* Add these to your existing CSS */
+
+/* Animation keyframes for the star icon */
+@keyframes sparkle {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.5) drop-shadow(0 0 3px rgba(25, 195, 125, 0.7)); }
+  100% { filter: brightness(1); }
+}
+
+/* Apply animation on hover */
+.aiButton:hover img {
+  transform: rotate(20deg) scale(1.1);
+  animation: sparkle 1.5s infinite;
+}
+
+/* Tooltip entry animation */
+@keyframes tooltipEntry {
+  from { 
+    opacity: 0; 
+    transform: translateX(-50%) translateY(10px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.aiButton:hover .aiTooltip {
+  animation: tooltipEntry 0.3s forwards;
+}
+
+
+.loadingIndicator {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(25, 195, 125, 0.3);
+  border-radius: 50%;
+  border-top-color: #19C37D;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.aiButton.generating {
+  background-color: rgba(25, 195, 125, 0.1);
+  cursor: wait;
+}

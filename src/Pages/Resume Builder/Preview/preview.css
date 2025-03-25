@@ -1,0 +1,331 @@
+/*======================================
+  TABLE OF CONTENTS
+  
+  1. PDF PREVIEW VARIABLES
+  2. PREVIEW CONTAINER STRUCTURE
+  3. PDF PAPER STYLING
+  4. RESPONSIVE SCALING
+  5. PAGE INDICATORS
+  6. HEADER & CONTROLS
+  7. CONTENT OVERFLOW HANDLING
+  8. RESPONSIVE DESIGN
+======================================*/
+
+/*======================================
+  1. PDF PREVIEW VARIABLES
+======================================*/
+:root {
+  /* A4 Paper Dimensions */
+  --a4-width-px: 595px;       /* A4 width in pixels (at 72dpi) */
+  --a4-height-px: 842px;      /* A4 height in pixels (at 72dpi) */
+  --a4-margin-mm: 20mm;       /* Standard margin size */
+  --a4-aspect-ratio: 1/1.414; /* Width to height ratio */
+  
+  /* Preview Scaling */
+  --preview-scale: 0.8;       /* Default scale factor */
+  --preview-margin-adjust: -10%; /* Margin adjustment to compensate for scaling */
+  
+  /* Colors */
+  --preview-bg-color: #f2f2f2;
+  --paper-color: white;
+  --paper-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  --page-indicator-color: rgba(255, 0, 0, 0.3);
+}
+
+/*======================================
+  2. PREVIEW CONTAINER STRUCTURE 
+======================================*/
+/* Main preview container */
+.preview-container {
+  display: flex;
+  flex-direction: column;
+  width:100%;
+  height: 80vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Preview area - scrollable content area */
+.preview-area {
+  flex: 1;
+  overflow: auto;
+  padding: 0.5rem;
+  background-color: var(--preview-bg-color);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 80vh;
+}
+
+/* Preview section - the whole right side */
+.preview-section {
+  flex: 1;
+  max-width: 50%;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/*======================================
+  3. PDF PAPER STYLING 
+======================================*/
+/* Resume wrapper - contains the paper */
+.resume-wrapper {
+  position: relative;
+  width: min(100%, var(--a4-width-px));
+  margin: 0 auto;
+  box-shadow: var(--paper-shadow);
+  transform: scale(var(--preview-scale));
+  transform-origin: top center;
+  margin-top: -5%; /* Reduced from -10% to -5% since we're reducing internal padding */
+}
+
+/* A4 paper styling */
+.a4-paper {
+  position: relative;
+  background-color: var(--paper-color);
+  width: 100%;
+  aspect-ratio: var(--a4-aspect-ratio);
+  padding: var(--a4-margin-mm);
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  line-height: 1.5;
+  overflow: visible;
+}
+
+/*======================================
+  4. RESPONSIVE SCALING
+======================================*/
+/* Define scale adjustments for different screen sizes */
+@media (max-width: 1440px) {
+  :root {
+    --preview-scale: 0.75;
+    --preview-margin-adjust: -12%;
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --preview-scale: 0.7;
+    --preview-margin-adjust: -15%;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --preview-scale: 0.65;
+    --preview-margin-adjust: -18%;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --preview-scale: 0.5;
+    --preview-margin-adjust: -25%;
+  }
+}
+
+/*======================================
+  5. PAGE INDICATORS
+======================================*/
+/* Page break indicator */
+.paper-size-indicator {
+  position: absolute;
+  top: var(--a4-height-px);
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--page-indicator-color);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* When content exceeds one page, add dashed line indicator */
+.resume-document::after {
+  content: '';
+  position: absolute;
+  top: var(--a4-height-px);
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.2),
+    rgba(0, 0, 0, 0.2) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/*======================================
+  6. HEADER & CONTROLS
+======================================*/
+/* Preview header with title and controls */
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: var(--card); /* Use card color from theme */
+  border-bottom: 1px solid var(--border); /* Use border color from theme */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Darker shadow for depth */
+  position: relative;
+  z-index: 10;
+}
+
+.preview-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--text); /* Use text color from theme */
+  font-weight: 600;
+}
+
+/* Container for buttons */
+.preview-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* Base styles for both buttons */
+.download-button,
+.saveButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.25rem;
+  background-color: var(--accent); /* Use accent color from theme */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow */
+}
+
+/* Button hover effect */
+.download-button:hover:not(:disabled),
+.saveButton:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--accent) 85%, white); /* Lighten accent color */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Darker shadow on hover */
+}
+
+/* Button active/pressed effect */
+.download-button:active:not(:disabled),
+.saveButton:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  background-color: color-mix(in srgb, var(--accent) 90%, black); /* Darken accent color when pressed */
+}
+
+/* Disabled state */
+.download-button:disabled {
+  background-color: color-mix(in srgb, var(--border) 70%, black); /* Darker gray for disabled in dark mode */
+  cursor: not-allowed;
+  opacity: 0.65;
+  box-shadow: none;
+}
+
+/* Consistent image sizing */
+.download-button img,
+.saveButton img {
+  width: 1.25rem;
+  height: 1.25rem;
+  object-fit: contain;
+  filter: brightness(0) invert(1); /* Make icons white */
+}
+
+/* Make sure the buttons don't get default button styling */
+.preview-header button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Add a subtle transition to the preview area */
+.preview-area {
+  transition: padding 0.3s ease;
+  background-color: var(--background); /* Use background color from theme */
+}
+
+/* Add a small hint text for actions */
+.preview-actions::after {
+  content: 'Download or save your resume';
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 1.5rem;
+  font-size: 0.75rem;
+  color: var(--secondary-text); /* Use secondary text color from theme */
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.preview-actions:hover::after {
+  opacity: 0.8; /* Slightly lower opacity for better contrast in dark mode */
+}
+
+
+
+
+/*======================================
+  7. CONTENT OVERFLOW HANDLING
+======================================*/
+/* Placeholder for empty resume */
+.resume-placeholder {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #aaaaaa;
+  text-align: center;
+  border: 2px dashed #dddddd;
+  border-radius: 0.5rem;
+  min-height: 80%;
+}
+
+.resume-placeholder p {
+  margin: 0.5rem 0;
+  font-size: 1.5rem;
+}
+
+.placeholder-hint {
+  font-size: 1rem !important;
+  opacity: 0.7;
+}
+
+/*======================================
+  8. RESPONSIVE DESIGN
+======================================*/
+/* Layout adjustments for mobile */
+@media (max-width: 1024px) {
+  .builder-container {
+    flex-direction: column;
+  }
+  
+  .builder-section, .preview-section {
+    flex: none;
+    width: 100%;
+    height: auto;
+    min-height: 50vh;
+  }
+  
+  .builder-section {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .resume-contact-info {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}

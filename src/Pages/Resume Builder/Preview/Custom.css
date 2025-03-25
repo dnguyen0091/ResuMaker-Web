@@ -1,0 +1,198 @@
+
+.sectionHeaderContainer {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  
+  .sectionHeaderInput {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color, #333);
+    padding: 0.5rem 0;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    width: 100%;
+    transition: all 0.2s ease;
+  }
+  
+  .sectionHeaderInput:hover {
+    border-bottom-color: rgba(13, 110, 253, 0.3);
+  }
+  
+  .sectionHeaderInput:focus {
+    outline: none;
+    border-bottom-color: var(--accent, #0d6efd);
+  }
+  
+  .sectionHeaderInput::placeholder {
+    color: var(--secondary-text, #6c757d);
+    opacity: 0.7;
+    font-weight: 600;
+  }
+  
+  /* Add a hint for editability on hover */
+  .sectionHeaderContainer::after {
+    content: '✏️ Click to edit';
+    position: absolute;
+    bottom: -1.5rem;
+    left: 0;
+    font-size: 0.75rem;
+    color: var(--secondary-text, #6c757d);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+  
+  .sectionHeaderContainer:hover::after {
+    opacity: 0.7;
+  }
+
+
+  /* Add to your resumeBuilder.css or the appropriate CSS file */
+
+/* Editable section header */
+.editableSectionHeader {
+    border: none;
+    background-color: transparent;
+    width: 100%;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--accent);
+  }
+  
+  .editableSectionHeader:focus {
+    outline: none;
+    border-bottom: 2px solid var(--accent);
+    background-color: rgba(99, 102, 241, 0.05);
+  }
+  
+  /* Edit title indicator */
+  .sectionHeader {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .sectionHeader .editTitleHint {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 0.85rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  .sectionHeader:hover .editTitleHint {
+    opacity: 0.7;
+  }
+  
+  /* Make customSectionContainer visually match experienceContainer */
+  .customSectionContainer {
+    background-color: var(--card);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+  }
+  
+  .customSectionContainer:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+  
+  /* Custom entry styling to match experience entry */
+  .customEntry {
+    padding: 1rem 0;
+  }
+  
+  /* Header title group styling */
+  .headerTitleGroup {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* AI Button Styling */
+  .aiButton {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    overflow: hidden;
+  }
+  
+  .aiButton img {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+  }
+  
+  /* Tooltip for AI button */
+  .aiTooltip {
+    position: absolute;
+    background-color: #343541;
+    color: white;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 10;
+  }
+  
+  /* Create a small arrow for the tooltip */
+  .aiTooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #343541 transparent transparent transparent;
+  }
+  
+  /* Hover effects */
+  .aiButton:hover {
+    background-color: rgba(25, 195, 125, 0.1); /* Light green background on hover */
+  }
+  
+  .aiButton:hover img {
+    transform: rotate(20deg) scale(1.1); /* Rotate and scale the star icon */
+  }
+  
+  .aiButton:hover .aiTooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  
+  /* Loading indicator */
+  .loadingIndicator {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(25, 195, 125, 0.3);
+    border-radius: 50%;
+    border-top-color: #19C37D;
+    animation: spin 1s infinite linear;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
