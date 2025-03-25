@@ -26,7 +26,7 @@ export default function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/landing" element={<Landing />} />
 
-            <Route path='/auth' element={ <AuthPage /> } />
+            <Route path='/auth' element={ <HomePage /> } />
 
             <Route path="/resume-builder" element={<ResumeBuilder />} />
             <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
