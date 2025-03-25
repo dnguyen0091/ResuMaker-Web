@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import starIcon from '../../../assets/Icons/stars.svg';
+// import starIcon from '../../../assets/Icons/stars.svg';
 
 export default function Experience({ experienceList, setExperienceList }) {
     const [reviewingId, setReviewingId] = useState(null);

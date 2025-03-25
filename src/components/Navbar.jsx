@@ -15,7 +15,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="w-full bg-blue-600 p-4 shadow-md">
+    <nav className="w-full bg-blue-600 p-4 shadow-md absolute">
       <div className="max-w-6xl mx-auto flex justify-between items-center">
         <Link to="/" className="text-white text-xl font-bold">
           ResuMaker
@@ -25,10 +25,10 @@ export default function Navbar() {
           <Link to="/dashboard" className="text-white hover:underline">Dashboard</Link>
           <Link to="/resume" className="text-white hover:underline">Resume Builder</Link>
 
-          {user && user.login !== "undefined" ? (
+          {user && user.email !== "undefined" ? (
             <div className="relative group">
               <button className="text-white font-semibold hover:underline">
-                {user.login + ""}
+                {user.email + ""}
               </button>
               <div className="absolute right-0 mt-0 w-32 bg-white shadow-lg rounded hidden group-hover:block">
                 <button

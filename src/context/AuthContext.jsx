@@ -12,27 +12,29 @@ export function AuthProvider({ children }) {
     if(storedUser && storedUser !== "undefined") {
       setUser(JSON.parse(storedUser));
     }
-  }, []);
+  }, [localStorage.getItem("user")]);
 
 
-  const loginUser = async (login, password) => {
-    const data = await apiLoginUser(login, password);
-    localStorage.setItem("user", JSON.stringify(data));
+  const loginUser = async (email, password) => {
+    const data = await apiLoginUser(email, password);
+    localStorage.setItem("user", JSON.stringify(data.user));
     localStorage.setItem("token", data.token);
     setUser(data.user);
     console.log("User saved:", data.user);
   };
 
-  const registerUser = async (firstName, lastName, login, password
+  const registerUser = async (firstName, lastName, email, password
   ) => {
-    const data = await apiRegisterUser(firstName, lastName, login, password);
-    setUser(data.user)
+    const data = await apiRegisterUser(firstName, lastName, email, password);
+    localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("token", data.token);
+    setUser(data.user);
   }
 
   const logoutUser = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
-    console.log("removing user");
+    console.log("removing user from local storage");
     setUser(null);
   }
 

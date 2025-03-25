@@ -1,34 +1,43 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import '../index.css';
-import MainLayout from '../Layouts/MainLayout';
-import NoLayout from '../Layouts/NoLayout';
+import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import MainLayout from './layouts/MainLayout';
+import NoLayout from './layouts/NoLayout';
+import Navbar from './components/Navbar';
 import './App.css';
-import Credits from './Credits/credits';
-import HomePage from './homepage/HomePage';
-import Landing from './landing/landing';
-import ResumeAnalyzer from './Resume Analyzer/resumeAnalyzer';
-import ResumeBuilder from './Resume Builder/resumeBuilder';
+import Credits from './pages/Credits';
+import HomePage from './pages/HomePage';
+import Landing from './pages/landingPage';
+import ResumeAnalyzer from './pages/Resume Builder/Analyzer';
+import ResumeBuilder from './pages/Resume Builder/ResumeBuilder';
+import AuthPage from './pages/AuthPage';
 
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Routes that use the global layout */}
-        <Route element={<MainLayout />}>
-          {/* <Route path="/" element={<Landing />} /> */}
-          <Route path="/landing" element={<Landing />} />
-          <Route path="/resume-builder" element={<ResumeBuilder />} />
-          <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
-          <Route path="/credits" element={<Credits/>}/>
-        </Route>
+    <AuthProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          {/* Routes that use the global layout */}
+          <Route element={<MainLayout />}>
+            {/* <Route path="/" element={<Landing />} /> */}
+            <Route path="/" element={<Landing />} />
+            <Route path="/landing" element={<Landing />} />
 
-        {/* Routes without global layout */}
-        <Route element={<NoLayout />}>
-          <Route path="/" element={<HomePage />} />
-        </Route>
-      </Routes>
-    </Router>
+            <Route path='/auth' element={ <AuthPage /> } />
+
+            <Route path="/resume-builder" element={<ResumeBuilder />} />
+            <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
+            <Route path="/credits" element={<Credits/>}/>
+          </Route>
+
+          {/* Routes without global layout */}
+          <Route element={<NoLayout />}>
+            <Route path="/" element={<HomePage />} />
+          </Route>
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 

@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 export default function AuthPage() {
   const { user, loginUser, registerUser } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
-  const [login, setLogin] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -27,12 +27,12 @@ export default function AuthPage() {
 
     try {
       if(isLogin) {
-        await loginUser(login, password);
+        await loginUser(email, password);
       } else {
-        await registerUser(firstName, lastName, login, password);
+        await registerUser(firstName, lastName, email, password);
       }
       
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       setError("Authentication failed. Please try again.");
       console.error("Auth error:", error);
@@ -40,7 +40,7 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-full flex items-center justify-center">
 
       <form
         onSubmit={handleSubmit}
@@ -74,8 +74,8 @@ export default function AuthPage() {
         <input
           type="text"
           placeholder="Login"
-          value={login}
-          onChange={(e) => setLogin(e.target.value)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-full border p-2 rounded mb-2"
           required
         />

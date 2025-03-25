@@ -1,8 +1,8 @@
 // import html2canvas from 'html2canvas';
 // import jsPDF from 'jspdf';
 import React, { useEffect, useRef, useState } from 'react';
-import downloadIcon from '../../assets/Icons/download.svg';
-import saveIcon from '../../assets/Icons/save.svg';
+// import downloadIcon from '../../assets/Icons/download.svg';
+// import saveIcon from '../../assets/Icons/save.svg';
 import './Preview/Custom.css';
 import './Preview/EducationExperience.css';
 import './Preview/preview.css';

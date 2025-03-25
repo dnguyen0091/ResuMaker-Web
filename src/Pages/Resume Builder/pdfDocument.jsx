@@ -7,10 +7,10 @@ import {
   CustomStyles
 } from '../../Styles/pdfStyles';
 
-import PinIcon from '../../assets/Icons/pin.png';
-import MailIcon from '../../assets/Icons/mail.png';
-import PhoneIcon from '../../assets/Icons/phone.png';
-import LinkIcon from '../../assets/Icons/link.png';
+// import PinIcon from '../../assets/Icons/pin.png';
+// import MailIcon from '../../assets/Icons/mail.png';
+// import PhoneIcon from '../../assets/Icons/phone.png';
+// import LinkIcon from '../../assets/Icons/link.png';
 
 const pdfDocument = ({ resumeData }) => {
   const { personalInfo, education = [], experience = [], customSections = [] } = resumeData;
