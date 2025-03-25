@@ -5,7 +5,7 @@ import NoLayout from './layouts/NoLayout';
 import Navbar from './components/Navbar';
 import './App.css';
 import Credits from './pages/Credits';
-import HomePage from './pages/HomePage';
+// import HomePage from './pages/HomePage';
 import Landing from './pages/landingPage';
 import ResumeAnalyzer from './pages/Resume Builder/Analyzer';
 import ResumeBuilder from './pages/Resume Builder/ResumeBuilder';
