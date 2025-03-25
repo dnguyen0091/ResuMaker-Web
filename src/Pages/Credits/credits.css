@@ -1,0 +1,70 @@
+/* Header for the Developers section */
+h1 {
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+    font-size: 4rem;
+}
+
+/* Container for developer rows */
+.developer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Each row of developers */
+.developer-row {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+/* Individual developer card styling */
+.developer {
+    background-color: var(--primary-color);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    flex: 1 1 0; /* allow cards to grow/shrink */
+    max-width: 250px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.developer:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Developer image styling */
+.developer img {
+    width: clamp(80px, 10vw, 120px);
+    height: clamp(80px, 10vw, 120px);
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border: 3px solid var(--accent);
+}
+
+/* Developer name styling */
+.developer h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+/* Developer role description styling */
+.developer p {
+    font-size: 0.95rem;
+    color: #777;
+    margin: 0;
+}
