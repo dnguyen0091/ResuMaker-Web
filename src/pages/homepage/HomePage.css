@@ -1,0 +1,117 @@
+/* Removes unneeded scrollbars */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Ensure the container exactly fits the viewport without scrolling */
+.homepage-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #343541;
+    text-align: center;
+    animation: fadeIn 1s ease;
+}
+
+@animation fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+/* Spread out elements properly */
+.homepage-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+}
+
+/* Logo */
+.home-logo {
+    width: 500px;
+    height: auto;
+    margin-top: 10vh;
+}
+
+/* About Section */
+.about-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 5vh;
+}
+
+.about-title {
+    font-size: 2rem;
+    margin-bottom: 0; /* Ensures no space below title */
+    padding-bottom: 0;
+}
+
+.about-text {
+    color: white;
+    max-width: 600px;
+    line-height: 1.6;
+    margin-top: 2vh; /* Ensures no space above text */
+    padding-top: 0;
+}
+
+/* Buttons */
+.button-container {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    margin-top: 10vh;
+}
+
+/* Get Started button */
+.get-started {
+    background-color: #1cc37d /*#3b82f6*/;
+    color: white;
+    width: 100%;
+    padding: 14px 24px;
+}
+
+.get-started:hover {
+    background-color: #17a96c /*#2563eb*/;
+}
+
+/* Login section */
+.login-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    color: white;
+    margin-top: 5vh;
+}
+
+.login-text {
+    font-weight: normal;
+}
+
+/* Login text button */
+.login-button {
+    background: none;
+    border: none;
+    color: #1cc37d;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.login-button:hover {
+    color: #17a96c;
+}
