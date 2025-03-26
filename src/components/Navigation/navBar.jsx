@@ -35,9 +35,9 @@ export default function NavBar() {
         };
     }, [showDropdown]);
 
-    const handleHomeClick = () => {
-        navigate('/');
-    };
+    // const handleHomeClick = () => {
+    //     navigate('/');
+    // };
 
     const handleResumeBuilderClick = () => {
         navigate('/resume-builder');
@@ -54,7 +54,7 @@ export default function NavBar() {
     return (
         // Container for "Pill Nav Bar"
         <div className="nav-bar">
-            <button className="buttonPage" onClick={handleHomeClick}>Home</button>
+            {/* <button className="buttonPage" onClick={handleHomeClick}>Home</button> */}
                 
             <button className="buttonPage" onClick={handleResumeBuilderClick}>Resume Builder</button>
                 
