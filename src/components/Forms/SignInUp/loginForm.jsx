@@ -450,6 +450,51 @@ export default function LoginForm() {
           </form>
         </div>
       )}
+      {(loginStep==='verifyAccount') && (
+        <div className="verification-container">
+        <h2 className="form-title">Verify</h2>
+        
+        {/* Error message */}
+        {error && <div className="form-error">{error}</div>}
+        
+        {/* Success message */}
+        {successMsg && <div className="form-success">{successMsg}</div>}
+        
+        <p className="verification-message">We've sent a verification code to <strong>{formData.email}</strong>.</p>
+        
+        <form onSubmit={handleVerificationSubmit} className="verification-form">
+          <div className="form-group">
+            {/* <label className="form-label" htmlFor="verificationCode">Verification Code</label> */}
+            <input 
+              type="text" 
+              id="verificationCode" 
+              className="form-input" 
+              placeholder="Enter verification code" 
+              required
+            />
+          </div>
+          <button 
+            type="submit" 
+            className="form-button"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Verifying...' : 'Verify'}
+          </button>
+          
+          <div className="resend-code">
+            <p>Didn't receive a code?</p>
+            <button 
+              type="button" 
+              className="resend-button"
+              onClick={handleResendCode}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Sending...' : 'Resend Code'}
+            </button>
+          </div>
+        </form>
+      </div>  
+      )}
     </div>
   );
 }
