@@ -1,7 +1,7 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import './App.css';
+// import './App.css';
 import { AuthProvider } from './context/AuthContext';
-import './index.css';
+// import './index.css';
 import MainLayout from './layouts/MainLayout';
 import NoLayout from './layouts/NoLayout';
 import Credits from './pages/Credits/credits';
