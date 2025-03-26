@@ -5,15 +5,12 @@ import NoLayout from './layouts/NoLayout';
 import Navbar from './components/Navbar';
 import './App.css';
 import Credits from './pages/Credits';
-// import HomePage from './pages/HomePage';
+import HomePage from './pages/homepage/HomePage';
 import Landing from './pages/LandingPage';
 import ResumeAnalyzer from './pages/Resume Builder/Analyzer';
 import ResumeBuilder from './pages/Resume Builder/ResumeBuilder';
 import AuthPage from './pages/AuthPage';
 
-
-//My imports
-import HomePage from './pages/HomePage';
 export default function App() {
   return (
     <AuthProvider>
@@ -23,7 +20,6 @@ export default function App() {
           {/* Routes that use the global layout */}
           <Route element={<MainLayout />}>
             {/* <Route path="/" element={<Landing />} /> */}
-            <Route path="/" element={<Landing />} />
             <Route path="/landing" element={<Landing />} />
 
             <Route path='/auth' element={ <AuthPage /> } />
