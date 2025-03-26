@@ -11,3 +11,8 @@ export const apiRegisterUser = async (firstName, lastName, email, password) => {
   const response = await axios.post(`${API_URL}/auth/register`, { firstName, lastName, email, password });
   return response.data;
 }
+
+export const apiCheckExists = async (email) => {
+  const response = await axios.post(`${API_URL}/auth/checkExists`, { email });
+  return response.data;
+}
