@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ConnectUser from "../../Components/Forms/SignInUp/connectUser";
 import logo from '../../assets/Resumaker.png';
+import ConnectUser from "../../components/Forms/SignInUp/connectUser";
 import "./HomePage.css";
 
 export default function HomePage() {

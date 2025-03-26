@@ -1,15 +1,15 @@
 // import html2canvas from 'html2canvas';
 // import jsPDF from 'jspdf';
+import { pdf } from '@react-pdf/renderer';
 import React, { useEffect, useRef, useState } from 'react';
-// import downloadIcon from '../../assets/Icons/download.svg';
-// import saveIcon from '../../assets/Icons/save.svg';
+import downloadIcon from '../../assets/Icons/download.svg';
+import saveIcon from '../../assets/Icons/save.svg';
+import MyPDFDocument from './pdfDocument';
 import './Preview/Custom.css';
 import './Preview/EducationExperience.css';
 import './Preview/preview.css';
 import './Preview/resumeContent.css';
 import './resumeBuilder.css';
-import { pdf } from '@react-pdf/renderer';
-import MyPDFDocument from './pdfDocument';
 
 /**
  * A PDF preview component that updates in real-time as the user inputs data

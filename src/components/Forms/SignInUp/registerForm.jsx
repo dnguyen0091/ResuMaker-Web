@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import eyeClosedIcon from '../../../assets/Icons/eyeClosed.svg';
 import eyeOpenIcon from '../../../assets/Icons/eyeOpen.svg';
+import '../../../index.css';
 import './forms.css';
 
 export default function RegisterForm() {
@@ -312,7 +313,7 @@ export default function RegisterForm() {
           {/* Password requirements checklist */}
           {formData.password && (
             <div className="password-requirements">
-              <p className="requirements-title">Password must have:</p>
+              <p className="requirements-title" id="reqTitle">Password must have:</p>
               <ul className="requirements-list">
                 <li className={passwordValidation.length ? 'met' : 'not-met'}>
                   At least 8 characters

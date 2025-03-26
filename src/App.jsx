@@ -1,28 +1,24 @@
-import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import './App.css';
 import { AuthProvider } from './context/AuthContext';
+import './index.css';
 import MainLayout from './layouts/MainLayout';
 import NoLayout from './layouts/NoLayout';
-import Navbar from './components/Navbar';
-import './App.css';
-import Credits from './pages/Credits';
+import Credits from './pages/Credits/credits';
 import HomePage from './pages/homepage/HomePage';
-import Landing from './pages/LandingPage';
-import ResumeAnalyzer from './pages/Resume Builder/Analyzer';
-import ResumeBuilder from './pages/Resume Builder/ResumeBuilder';
-import AuthPage from './pages/AuthPage';
+import ResumeAnalyzer from './pages/Resume Analyzer/resumeAnalyzer';
+import ResumeBuilder from './pages/Resume Builder/resumeBuilder';
 
 export default function App() {
   return (
     <AuthProvider>
       <Router>
-        <Navbar />
         <Routes>
           {/* Routes that use the global layout */}
           <Route element={<MainLayout />}>
             {/* <Route path="/" element={<Landing />} /> */}
-            <Route path="/landing" element={<Landing />} />
 
-            <Route path='/auth' element={ <AuthPage /> } />
+            {/* <Route path='/auth' element={ <AuthPage /> } /> */}
 
             <Route path="/resume-builder" element={<ResumeBuilder />} />
             <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
@@ -38,35 +34,4 @@ export default function App() {
     </AuthProvider>
   );
 }
-
-// function App() {
-//   return (
-//     <Router>
-//       {/* Outer container to ensure full width */}
-//       <div className="app-container">
-//         {/* Header with no extra margins */}
-//         <Header />
-        
-//         {/* Content area */}
-//         <div className="content-container">
-//           {/* NavPill centered */}
-//           <div className="nav-pill-wrapper">
-//             <NavPill />
-//           </div>
-          
-//           {/* Main content area */}
-//           <main className="page-content">
-//             <Routes>
-//               <Route path="/" element={<Landing />} />
-//               <Route path="/resume-builder" element={<ResumeBuilder />} />
-//               <Route path="/resume-analyzer" element={<ResumeAnalyzer />} />
-//             </Routes>
-//           </main>
-//         </div>
-//       </div>
-//     </Router>
-//   );
-// }
-
-// export default App;
 

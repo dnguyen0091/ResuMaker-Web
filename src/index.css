@@ -2,7 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* Theme Colors - Only define dark theme values */
+  --background-dark: #343541; /* Main background */
+  --card-dark: #444654; /* Chat bubbles */
+  --text-dark: #EFEFEF; /* Primary text */
+  --secondary-text-dark: #ACACBE; /* Secondary text */
+  --border-dark: #565869; /* Borders/dividers */
+  --accent-dark: #19C37D; /* GPT accent (green) */
+  --user-bubble-dark: #202123; /* User message background */
+  --input-field-dark: #40414F; /* Input field background */
+  --icon-dark: #D9D9E3; /* Icons */
+  
+  /* Default variables now use dark theme values */
+  --background: var(--background-dark);
+  --card: var(--card-dark);
+  --text: var(--text-dark);
+  --secondary-text: var(--secondary-text-dark);
+  --border: var(--border-dark);
+  --accent: var(--accent-dark);
+  --user-bubble: var(--user-bubble-dark);
+  --input-field: var(--input-field-dark);
+  --icon: var(--icon-dark);
+  --icon-brightness: 0.85; /* Dark mode icon brightness */
+  --primary-color:#101014;
+  --secondary-color:#1E1E1E;
+}
 
+/* Light theme class - apply this to enable light mode */
+.theme-light {
+  --background: #F7F7F8; /* Main background */
+  --card: #FFFFFF; /* Chat bubbles */
+  --text: #202123; /* Primary text */
+  --secondary-text: #6E6E80; /* Secondary text */
+  --border: #D9D9E3; /* Borders/dividers */
+  --accent: #19C37D; /* GPT accent (green) - can stay same in both themes */
+  --user-bubble: #E5E5EA; /* User message background */
+  --input-field: #FFFFFF; /* Input field background */
+  --icon: #ACACBE; /* Icons */
+  --icon-brightness: 1; /* Normal brightness in light mode */
+}
+
+body
+{
+  color:var(--text);
+  background-color:var(--background);
+  font-family: 'JetBrains Mono', monospace;
+}
 /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

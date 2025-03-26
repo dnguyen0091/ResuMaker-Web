@@ -49,7 +49,10 @@
   }
 
 
-  /* Add to your resumeBuilder.css or the appropriate CSS file */
+.sectionTitleInput
+{
+  background-color: transparent;
+}
 
 /* Editable section header */
 .editableSectionHeader {

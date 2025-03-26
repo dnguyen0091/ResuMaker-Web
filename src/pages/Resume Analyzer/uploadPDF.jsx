@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { analyzePdf } from '../../API/resumeService';
+// import { analyzePdf } from '../../API/resumeService';
 import './resumeAnalyzer.css';
 
 export default function UploadPDF({ onUploadSuccess }) {

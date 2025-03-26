@@ -1,5 +1,5 @@
 import React from 'react';
-// import starIcon from '../../../assets/Icons/stars.svg';
+import starIcon from '../../../assets/Icons/stars.svg';
 export default function Education({ educationList, setEducationList }) {
     const [reviewing, setReviewingId] = React.useState(false);
     const reviewAI = (educationId) => {

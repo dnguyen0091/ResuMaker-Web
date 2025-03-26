@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import '../../../index.css';
 import './connectUser.css';
 import LoginForm from './loginForm';
 import RegisterForm from './registerForm';
