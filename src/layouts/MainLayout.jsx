@@ -1,8 +1,8 @@
 import { Outlet } from 'react-router-dom';
-import Header from '../Components/Header/header';
-import NavPill from '../Components/Navigation/navPill';
+import Header from '../components/Header/header';
+import NavPill from '../components/Navigation/navPill';
 import '../index.css';
-import '../Pages/App.css';
+import '../App.css';
 
 function MainLayout() {
   return (
