@@ -7,7 +7,7 @@ import NoLayout from './layouts/NoLayout';
 import Credits from './pages/Credits/credits';
 import HomePage from './pages/homepage/HomePage';
 import ResumeAnalyzer from './pages/Resume Analyzer/resumeAnalyzer';
-import ResumeBuilder from './pages/Resume Builder/resumeBuilder';
+import ResumeBuilder from './pages/Resume Builder/ResumeBuilder';
 
 export default function App() {
   return (
