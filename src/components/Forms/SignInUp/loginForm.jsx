@@ -55,7 +55,7 @@ export default function LoginForm() {
           password: formData.password
         })
       });
-      
+      console.log(formData.email,formData.password);
       // Parse response
       const data = await response.json();
       
