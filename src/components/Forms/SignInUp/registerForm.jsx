@@ -93,10 +93,9 @@ export default function RegisterForm() {
     setIsLoading(true);
     
     try {
-      // API URL (best practice: use environment variables)
       const API_URL = 'https://resumaker-api.onrender.com';
       
-      // Send initial registration data to backend
+      // Send registration data to backend
       const response = await fetch(`${API_URL}/api/auth/register`, {
         method: 'POST',
         headers: {
@@ -105,28 +104,37 @@ export default function RegisterForm() {
         body: JSON.stringify({
           firstName: formData.firstName,
           lastName: formData.lastName,
-          login: formData.email,
+          email: formData.email,
           password: formData.password
         })
       });
       
-      // Parse response
       const data = await response.json();
       
-      // Handle non-successful responses
       if (!response.ok) {
         throw new Error(data.message || 'Registration failed');
       }
       
-      // Handle successful initial registration - switch to verification step
-      setSuccessMsg('Verification code has been sent to your email.');
-      setRegistrationStep('verification');
+      // Registration successful: store token and user data
+      setSuccessMsg('User registered successfully!');
+      setRegistrationStep('complete');
       
-      // Store any necessary data from the response
-      // For example, if the API returns a temporary token or user ID
-      if (data.tempToken) {
-        localStorage.setItem('tempRegToken', data.tempToken);
+      if (data.token) {
+        localStorage.setItem('token', data.token);
       }
+      
+      if (data.user) {
+        localStorage.setItem('user', JSON.stringify(data.user));
+      }
+      
+      // Reset form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      });
       
     } catch (err) {
       setError(err.message || 'An error occurred during registration');
