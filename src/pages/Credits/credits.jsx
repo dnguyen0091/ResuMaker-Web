@@ -1,3 +1,8 @@
+import andrew from "../../assets/Devs/andrew.jpg";
+import david from "../../assets/Devs/david.jpg";
+import james from "../../assets/Devs/james.jpg";
+import juniper from "../../assets/Devs/juniper.jpg";
+import lucas from "../../assets/Devs/lucas.png";
 import profile from "../../assets/Icons/profile.svg";
 import "../../index.css";
 import "./credits.css";
@@ -51,22 +56,22 @@ export default function Credits()
             <div className="developer-container">
                 <div className="developer-row">
                     <div className="developer">
-                        <img src={profile} alt="David Nguyen" onClick={handleClick} className="David" />
+                        <img src={david} alt="David Nguyen" onClick={handleClick} className="David" />
                         <h2>David Nguyen</h2>
                         <p>Project Manager/Front-End Developer</p>
                     </div>
                     <div className="developer">
-                        <img src={profile} alt="Lucas Santana" onClick={handleClick} className="Lucas" />
+                        <img src={lucas} alt="Lucas Santana" onClick={handleClick} className="Lucas" />
                         <h2>Lucas Santana</h2>
                         <p>AI API Developer</p>
                     </div>
                     <div className="developer">
-                        <img src={profile} alt="Juniper Desanto" onClick={handleClick} className="Juniper" />
+                        <img src={juniper} alt="Juniper Desanto" onClick={handleClick} className="Juniper" />
                         <h2>Juniper Desanto</h2>
                         <p>API Developer</p>
                     </div>
                     <div className="developer">
-                        <img src={profile} alt="James Barnett" onClick={handleClick} className="James" />
+                        <img src={james} alt="James Barnett" onClick={handleClick} className="James" />
                         <h2>James Barnett</h2>
                         <p>Database/API Developer</p>
                     </div>
@@ -78,7 +83,7 @@ export default function Credits()
                         <p>Front-End Developer</p>
                     </div>
                     <div className="developer">
-                        <img src={profile} alt="Andrew Terry" onClick={handleClick} className="Andrew" />
+                        <img src={andrew} alt="Andrew Terry" onClick={handleClick} className="Andrew" />
                         <h2>Andrew Terry</h2>
                         <p>AI API Developer</p>
                     </div>
