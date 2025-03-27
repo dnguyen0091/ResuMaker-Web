@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import eyeClosedIcon from '../../../assets/Icons/eyeClosed.svg';
 import eyeOpenIcon from '../../../assets/Icons/eyeOpen.svg';
 import '../../../index.css';
@@ -34,7 +35,7 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-
+  const navigate = useNavigate();
   
   // Handle input changes
   const handleChange = (e) => {
@@ -114,10 +115,13 @@ export default function RegisterForm() {
       if (!response.ok) {
         throw new Error(data.message || 'Registration failed');
       }
-      
+      localStorage.setItem('email', formData.email);
+      setRegistrationStep('verification');
+
+
       // Registration successful: store token and user data
       setSuccessMsg('User registered successfully!');
-      setRegistrationStep('complete');
+      // setRegistrationStep('complete');
       
       if (data.token) {
         localStorage.setItem('token', data.token);
@@ -127,6 +131,7 @@ export default function RegisterForm() {
         localStorage.setItem('user', JSON.stringify(data.user));
       }
       
+      console.log(localStorage.getItem('user'));
       // Reset form
       setFormData({
         firstName: '',
@@ -144,6 +149,7 @@ export default function RegisterForm() {
     }
   };
 
+  
   const handleVerificationSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -155,7 +161,9 @@ export default function RegisterForm() {
       const tempToken = localStorage.getItem('tempRegToken');
       
       // Connect to endpoint to verify user
-      const response = await fetch(`${API_URL}/api/auth/verify`, {
+      const email=localStorage.getItem('email');
+      console.log(email + " " + verificationCode);
+      const response = await fetch(`${API_URL}/api/auth/verifyEmail`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -163,7 +171,7 @@ export default function RegisterForm() {
           ...(tempToken && { 'Authorization': `Bearer ${tempToken}` }),
         },
         body: JSON.stringify({
-          email: formData.email,
+          email: email,
           verificationCode: verificationCode
         })
       });
@@ -176,8 +184,9 @@ export default function RegisterForm() {
       
       // Verification successful
       localStorage.removeItem('tempRegToken'); // Clean up temp token
-      handleVerificationComplete();
+      localStorage.removeItem('email');
       
+      navigate('/resume-builder');
     } catch (err) {
       setError(err.message || 'Verification failed. Please try again.');
     } finally {
