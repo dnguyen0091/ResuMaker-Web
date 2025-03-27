@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import eyeClosedIcon from '../../../assets/Icons/eyeClosed.svg';
 import eyeOpenIcon from '../../../assets/Icons/eyeOpen.svg';
 import './forms.css';
@@ -27,6 +28,7 @@ export default function LoginForm() {
     }));
   };
 
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -77,7 +79,7 @@ export default function LoginForm() {
         }
         
       }
-      
+      navigate('/resume-builder');
     } catch (err) {
       setError(err.message || 'Login failed. Please try again.');
       console.error('Login error:', err);
