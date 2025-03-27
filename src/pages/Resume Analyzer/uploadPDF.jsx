@@ -23,7 +23,8 @@ export default function UploadPDF({ onUploadSuccess }) {
         
         // Create a URL for the file to be used for preview
         const fileUrl = URL.createObjectURL(file);
-        
+        console.log(fileUrl);
+        console.log(file);
         try {
             // Call the API to analyze the PDF
             const analysisResult = await analyzePdf(file);
@@ -59,7 +60,57 @@ export default function UploadPDF({ onUploadSuccess }) {
     };
     
     // Rest of the component remains the same...
-
+    async function analyzePdf(file) {
+        try {
+            const API_URL = 'https://resumaker-api.onrender.com';
+            const formData = new FormData();
+            formData.append('file', file);
+        
+            console.log('Starting file upload:', file.name);
+            
+            const response = await fetch(`${API_URL}/api/ai/analyze`, {  // Changed endpoint path
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                },
+                body: formData,
+            });
+            
+            console.log('Response status:', response.status);
+            
+            if (!response.ok) {
+              // Try to parse error response if possible
+                try {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `Server error: ${response.status}`);
+                } catch (jsonError) {
+                    // If JSON parsing fails, use status text
+                    throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                }
+            }
+            
+            // Handle empty response
+            const text = await response.text();
+            console.log('Response text length:', text.length);
+            
+            if (!text || text.trim() === '') {
+                throw new Error('Server returned an empty response');
+            }
+            
+            // Try to parse the JSON
+            try {
+                const analysisData = JSON.parse(text);
+                return analysisData;
+                } catch (jsonError) {
+                console.error('JSON parse error:', jsonError);
+                console.error('Raw response:', text);
+                throw new Error('Invalid response format from server');
+                }
+            } catch (error) {
+                console.error('Error in analyzePdf:', error);
+                throw error;
+            }
+    }
     
     return (
         <div className="upload-page-container">
