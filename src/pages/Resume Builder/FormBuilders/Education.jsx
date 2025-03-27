@@ -1,15 +1,56 @@
 import React from 'react';
 import starIcon from '../../../assets/Icons/stars.svg';
 export default function Education({ educationList, setEducationList }) {
-    const [reviewing, setReviewingId] = React.useState(false);
-    const reviewAI = (educationId) => {
-        // AI function to review the education section
+    const [reviewingId, setReviewingId] = React.useState(null);
+    const reviewAI = async (educationId) => {
+        // Set the reviewing state to show loading indicator
         setReviewingId(educationId);
         
         const education = educationList.find(item => item.id === educationId);
-        const bulletPoints= education.bulletPoints;
-
-        //Make API call here
+        console.log('Reviewing education:', education);
+        try {
+            const API_URL = 'https://resumaker-api.onrender.com';
+            const response = await fetch(`${API_URL}/api/ai/generate-education-bullets`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(education)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`);
+            }
+            
+            // Parse the response to get the generated bullets
+            const data = await response.json();
+            
+            // Update the entry with the generated bullet points
+            if (data.bullets && Array.isArray(data.bullets)) {
+                setEducationList(
+                    educationList.map(item => {
+                        if (item.id === educationId) {
+                            // Create new bullet points array
+                            const updatedBulletPoints = [...(item.bulletPoints || ['', ''])];
+                            
+                            // Update with AI-generated content
+                            updatedBulletPoints[0] = data.bullets[0] || updatedBulletPoints[0];
+                            updatedBulletPoints[1] = data.bullets[1] || updatedBulletPoints[1];
+                            
+                            return { ...item, bulletPoints: updatedBulletPoints };
+                        }
+                        return item;
+                    })
+                );
+            }
+            
+        } catch (error) {
+            console.error('Error generating AI content:', error);
+            // Could add code here to show error message to user
+        } finally {
+            // Always reset the reviewing state when done
+            setReviewingId(null);
+        }
     };
     // Add a new education entry
     const addEducation = () => {
@@ -98,9 +139,9 @@ export default function Education({ educationList, setEducationList }) {
                             className="aiButton" 
                             title="Generate content with AI"
                             onClick={() => reviewAI(edu.id)}
-                            disabled={reviewing !== null}
+                            disabled={reviewingId !== null}
                             >
-                            {reviewing === edu.id ? (
+                            {reviewingId === edu.id ? (
                                 <div className="loadingIndicator"></div>
                             ) : (
                                 <>

@@ -16,63 +16,55 @@ export default function CustomSection({ section, onChange }) {
     };
 
     // AI review function for items
-    const reviewAI = (itemId) => {
+    const reviewAI = async (itemId) => {
         // Set the reviewing state to show loading indicator
         setReviewingId(itemId);
         
         const item = entries.find(item => item.id === itemId);
         
-        // Simulate AI generation (replace with actual API call)
-        setTimeout(() => {
-            // Example AI-generated content based on the section title
-            const sectionType = title.toLowerCase();
-            let generatedBulletPoints = [];
+        try {
+            const API_URL = 'https://resumaker-api.onrender.com';
+            const response = await fetch(`${API_URL}/api/ai/generate-custom-bullets`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item) // Send just the item object, not wrapped in {item}
+            });
             
-            if (sectionType.includes('skill') || sectionType.includes('technical')) {
-                generatedBulletPoints = [
-                    `Advanced proficiency in ${item.title || 'relevant technologies'}`,
-                    `Applied ${item.title || 'these skills'} to solve complex problems`,
-                    `Continuously learning and improving ${item.title || 'skill set'}`
-                ];
-            } else if (sectionType.includes('project')) {
-                generatedBulletPoints = [
-                    `Led development of ${item.title || 'project'} that achieved significant metrics`,
-                    `Implemented innovative solutions to overcome technical challenges`,
-                    `Collaborated with team members to ensure timely delivery`
-                ];
-            } else if (sectionType.includes('volunteer') || sectionType.includes('community')) {
-                generatedBulletPoints = [
-                    `Contributed over 100 hours to ${item.title || 'this initiative'}`,
-                    `Helped organize events that benefited the local community`,
-                    `Received recognition for outstanding contributions`
-                ];
-            } else {
-                generatedBulletPoints = [
-                    `Demonstrated excellence in ${item.title || 'this area'}`,
-                    `Applied specialized knowledge to achieve measurable results`,
-                    `Received recognition for outstanding performance`
-                ];
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`);
             }
             
-            // Update the entry with AI suggestions
-            const updatedEntries = entries.map(item => {
-                if (item.id === itemId) {
-                    return {
-                        ...item,
-                        bulletPoints: generatedBulletPoints
-                    };
-                }
-                return item;
-            });
+            // Parse the response to get the generated bullets
+            const data = await response.json();
             
-            onChange({
-                ...section,
-                entries: updatedEntries
-            });
+            // Update the entry with the generated bullet points
+            if (data.bullets && Array.isArray(data.bullets)) {
+                // Create a copy of the current bullets
+                const updatedBulletPoints = [...(item.bulletPoints || ['', '', ''])];
+                
+                
+                updatedBulletPoints[0] = data.bullets[0] || updatedBulletPoints[0];
+                updatedBulletPoints[1] = data.bullets[1] || updatedBulletPoints[1];
+                updatedBulletPoints[2] = data.bullets[2] || updatedBulletPoints[2];
+                // Update the entry
+                onChange({
+                    ...section,
+                    entries: entries.map(entry => {
+                        if (entry.id === itemId) {
+                            return { ...entry, bulletPoints: updatedBulletPoints };
+                        }
+                        return entry;
+                    })
+                });
+            }
             
-            // Clear the reviewing state
+        } catch (error) {
+            console.error('Error generating AI content:', error);
+        } finally {
             setReviewingId(null);
-        }, 1500);
+        }
     };
     
     // Add a new entry

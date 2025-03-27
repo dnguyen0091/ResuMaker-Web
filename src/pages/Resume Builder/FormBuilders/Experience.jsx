@@ -5,39 +5,56 @@ export default function Experience({ experienceList, setExperienceList }) {
     const [reviewingId, setReviewingId] = useState(null);
 
     // AI review function for experience
-    const reviewAI = (experienceId) => {
+    const reviewAI = async (experienceId) => {
         // Set the reviewing state to show loading indicator
         setReviewingId(experienceId);
         
         const experience = experienceList.find(item => item.id === experienceId);
-        const bulletPoints = experience.bulletPoints;
         
-        // Simulate AI generation (replace with actual API call)
-        setTimeout(() => {
-            // Example AI-generated content based on the existing entry
-            const title = experience.title || "position";
-            const company = experience.company || "company";
+        try {
+            const API_URL = 'https://resumaker-api.onrender.com';
+            const response = await fetch(`${API_URL}/api/ai/generate-experience-bullets`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(experience)
+            });
             
-            // Update the entry with AI suggestions
-            setExperienceList(
-                experienceList.map(item => {
-                    if (item.id === experienceId) {
-                        return {
-                            ...item,
-                            bulletPoints: [
-                                `Led key initiatives that increased efficiency by 25% for ${company}'s core processes`,
-                                `Collaborated with cross-functional teams to deliver projects on time and within budget`,
-                                `Implemented innovative solutions that gained recognition from senior leadership`
-                            ]
-                        };
-                    }
-                    return item;
-                })
-            );
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`);
+            }
             
+            // Parse the response to get the generated bullets
+            const data = await response.json();
+            
+            // Update the entry with the generated bullet points
+            if (data.bullets && Array.isArray(data.bullets)) {
+                setExperienceList(
+                    experienceList.map(item => {
+                        if (item.id === experienceId) {
+                            // Create a copy of the current bullet points
+                            const updatedBulletPoints = [...(item.bulletPoints || ['', '', ''])];
+                            
+                            // Update with AI-generated content (up to 3 bullets)
+                            updatedBulletPoints[0] = data.bullets[0] || updatedBulletPoints[0];
+                            updatedBulletPoints[1] = data.bullets[1] || updatedBulletPoints[1];
+                            updatedBulletPoints[2] = data.bullets[2] || updatedBulletPoints[2];
+                            
+                            return { ...item, bulletPoints: updatedBulletPoints };
+                        }
+                        return item;
+                    })
+                );
+            }
+            
+        } catch (error) {
+            console.error('Error generating AI content:', error);
+            // Optionally show an error message to the user
+        } finally {
             // Clear the reviewing state
             setReviewingId(null);
-        }, 1500);
+        }
     };
     
     // Add a new experience entry
