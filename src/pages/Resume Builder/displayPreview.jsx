@@ -134,28 +134,28 @@ export default function DisplayPreview({ resumeData = {} }) {
                 <div className="resume-contact-info">
                   {personalInfo.location && (
                     <div className="contact-item">
-                      <span className="contact-icon">📍</span>
+                      <span className="contact-icon"></span>
                       <span>{personalInfo.location}</span>
                     </div>
                   )}
                   
                   {personalInfo.email && (
                     <div className="contact-item">
-                      <span className="contact-icon">✉️</span>
+                      <span className="contact-icon">|</span>
                       <span>{personalInfo.email}</span>
                     </div>
                   )}
                   
                   {personalInfo.phone && (
                     <div className="contact-item">
-                      <span className="contact-icon">📱</span>
+                      <span className="contact-icon">|</span>
                       <span>{personalInfo.phone}</span>
                     </div>
                   )}
                   
                   {personalInfo.linkedin && (
                     <div className="contact-item">
-                      <span className="contact-icon">🔗</span>
+                      <span className="contact-icon">|</span>
                       <span>{personalInfo.linkedin}</span>
                     </div>
                   )}

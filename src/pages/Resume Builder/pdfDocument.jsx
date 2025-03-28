@@ -1,10 +1,10 @@
 
+import { Document, Page, Text, View } from '@react-pdf/renderer';
 import React from 'react';
-import { Document, Page, Text, View, Image } from '@react-pdf/renderer';
 import {
-  ResumeContentStyles,
+  CustomStyles,
   EducationExperienceStyles,
-  CustomStyles
+  ResumeContentStyles
 } from '../../Styles/pdfStyles';
 
 // import PinIcon from '../../assets/Icons/pin.png';
@@ -15,13 +15,13 @@ import {
 const pdfDocument = ({ resumeData }) => {
   const { personalInfo, education = [], experience = [], customSections = [] } = resumeData;
 
-  const renderContactItem = (icon, value) =>
-    value ? (
-      <View style={ResumeContentStyles.contactItem}>
-        <Image src={icon} style={ResumeContentStyles.contactIcon} />
-        <Text>{value}</Text>
-      </View>
-    ) : null;
+  const renderContactItem = (separator, value) => {
+    if (!value) return null;
+    
+    return (
+      <Text style={ResumeContentStyles.contactItem}>{value}</Text>
+    );
+  };
 
   const renderBulletPoints = (points = []) =>
     points.filter(p => p && p.trim()).map((point, index) => (
@@ -57,10 +57,16 @@ const pdfDocument = ({ resumeData }) => {
             {personalInfo?.name || 'Your Name'}
           </Text>
           <View style={ResumeContentStyles.resumeContactInfo}>
-            {renderContactItem(PinIcon, personalInfo?.location)}
-            {renderContactItem(MailIcon, personalInfo?.email)}
-            {renderContactItem(PhoneIcon, personalInfo?.phone)}
-            {renderContactItem(LinkIcon, personalInfo?.linkedin)}
+            <Text style={ResumeContentStyles.contactText}>
+              {[
+                personalInfo?.location,
+                personalInfo?.email, 
+                personalInfo?.phone,
+                personalInfo?.linkedin
+              ]
+              .filter(Boolean) // Remove empty/null values
+              .join(" | ")} {/* Join with pipe separator */}
+            </Text>
           </View>
         </View>
 
