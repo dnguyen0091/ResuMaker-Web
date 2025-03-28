@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import eyeClosedIcon from '../../../assets/Icons/eyeClosed.svg';
 import eyeOpenIcon from '../../../assets/Icons/eyeOpen.svg';
+// import { useAuth } from '../../../context/AuthContext';
 import '../../../index.css';
 import './forms.css';
 
@@ -73,6 +74,7 @@ export default function RegisterForm() {
   }, [formData.password, formData.confirmPassword]);
 
   const [registrationStep, setRegistrationStep] = useState('form');
+  // const { registerUser } = useAuth();
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -123,14 +125,9 @@ export default function RegisterForm() {
       setSuccessMsg('User registered successfully!');
       // setRegistrationStep('complete');
       
-      if (data.token) {
-        localStorage.setItem('token', data.token);
-      }
-      
-      if (data.user) {
-        localStorage.setItem('user', JSON.stringify(data.user));
-      }
-      
+      // registerUser(formData.firstName, formData.lastName, formData.email, formData.password);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
       console.log(localStorage.getItem('user'));
       // Reset form
       setFormData({

@@ -133,6 +133,7 @@ export default function LoginForm() {
     }
   };
 
+    
     // Handle request password reset
     const handleResetRequest = async (e) => {
       e.preventDefault();
@@ -160,16 +161,24 @@ export default function LoginForm() {
           throw new Error(data.message || 'Failed to send reset code');
         }
         
+        // Update success message and move to code verification step
         setSuccessMsg('A password reset code has been sent to your email.');
         setLoginStep('resetCode');
         
-        // Store any temporary tokens if needed
-        if (data.resetToken) {
-          localStorage.setItem('tempResetToken', data.resetToken);
-        }
+        // Remove this block since the endpoint no longer returns a resetToken
+        // if (data.resetToken) {
+        //   localStorage.setItem('tempResetToken', data.resetToken);
+        // }
         
       } catch (err) {
-        setError(err.message || 'Failed to send reset code. Please try again.');
+        // Handle specific error cases based on the updated endpoint
+        if (err.message === "Email not in use") {
+          setError("No account found with this email address.");
+        } else if (err.message === "Email not verified. Please re-register") {
+          setError("Your account is not verified. Please register again.");
+        } else {
+          setError(err.message || 'Failed to send reset code. Please try again.');
+        }
         console.error('Reset request error:', err);
       } finally {
         setIsLoading(false);
@@ -181,43 +190,51 @@ export default function LoginForm() {
       e.preventDefault();
       setIsLoading(true);
       setError('');
+      setSuccessMsg('');
       
-      setLoginStep('newPassword');
-      // try {
-      //   const API_URL = 'https://resumaker-api.onrender.com';
-      //   const resetCode = document.getElementById('resetCode').value;
-      //   const tempToken = localStorage.getItem('tempResetToken');
+      try {
+        const API_URL = 'https://resumaker-api.onrender.com';
+        const resetCode = document.getElementById('resetCode').value;
         
-      //   // Verify reset code
-      //   const response = await fetch(`${API_URL}/api/auth/verify-reset-code`, {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       ...(tempToken && { 'Authorization': `Bearer ${tempToken}` }),
-      //     },
-      //     body: JSON.stringify({
-      //       email: formData.email,
-      //       resetCode: resetCode
-      //     })
-      //   });
+        // Connect to endpoint to verify reset code
+        const response = await fetch(`${API_URL}/api/auth/verifyForgot`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            verificationCode: resetCode
+          })
+        });
         
-      //   const data = await response.json();
+        const data = await response.json();
         
-      //   if (!response.ok) {
-      //     throw new Error(data.message || 'Invalid reset code');
-      //   }
+        if (!response.ok) {
+          throw new Error(data.message || 'Verification failed');
+        }
         
-      //   setSuccessMsg('Code verified. Please set a new password.');
-      //   setLoginStep('newPassword');
+        // Verification successful
+        setSuccessMsg('Verification successful. You can now set a new password.');
         
-      // } catch (err) {
-      //   setError(err.message || 'Code verification failed. Please try again.');
-      // } finally {
-      //   setIsLoading(false);
-      // }
+        // Store user data if needed
+        if (data.user) {
+          localStorage.setItem('resetUserData', JSON.stringify(data.user));
+        }
+        
+        // Move to password reset screen
+        setTimeout(() => {
+          setLoginStep('newPassword');
+        }, 1000);
+        
+      } catch (err) {
+        setError(err.message || 'Verification failed. Please try again.');
+        console.error('Reset code verification error:', err);
+      } finally {
+        setIsLoading(false);
+      }
     };
     
-    // Handle password reset
     const handleResetPassword = async (e) => {
       e.preventDefault();
       setIsLoading(true);
@@ -236,43 +253,48 @@ export default function LoginForm() {
         return;
       }
       
-      // try {
-      //   const API_URL = 'https://resumaker-api.onrender.com';
-      //   const tempToken = localStorage.getItem('tempResetToken');
+      try {
+        const API_URL = 'https://resumaker-api.onrender.com';
         
-      //   // Reset password
-      //   const response = await fetch(`${API_URL}/api/auth/reset-password`, {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       ...(tempToken && { 'Authorization': `Bearer ${tempToken}` }),
-      //     },
-      //     body: JSON.stringify({
-      //       email: formData.email,
-      //       password: newPassword
-      //     })
-      //   });
+        // Send request to update password
+        const response = await fetch(`${API_URL}/api/auth/updatePassword`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: newPasswordData.newPassword
+          })
+        });
         
-      //   const data = await response.json();
+        const data = await response.json();
         
-      //   if (!response.ok) {
-      //     throw new Error(data.message || 'Password reset failed');
-      //   }
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to update password');
+        }
         
-      //   // Clean up
-      //   localStorage.removeItem('tempResetToken');
+        // Password update successful
+        setSuccessMsg('Password has been successfully updated');
         
-      //   setSuccessMsg('Password has been reset successfully!');
-      //   setLoginStep('login');
+        // Clean up temporary tokens
+        localStorage.removeItem('tempResetToken');
         
-      //   // Clear password fields
-      //   setFormData({...formData, password: ''});
+        // Reset form and return to login screen after a short delay
+        setTimeout(() => {
+          setLoginStep('login');
+          setNewPasswordData({
+            newPassword: '',
+            confirmNewPassword: ''
+          });
+        }, 2000);
         
-      // } catch (err) {
-      //   setError(err.message || 'Password reset failed. Please try again.');
-      // } finally {
-      //   setIsLoading(false);
-      // }
+      } catch (err) {
+        setError(err.message || 'Failed to update password. Please try again.');
+        console.error('Password reset error:', err);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
 
