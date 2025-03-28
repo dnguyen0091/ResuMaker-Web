@@ -59,8 +59,9 @@ export default function UploadPDF({ onUploadSuccess }) {
         }
     };
     
-    // Rest of the component remains the same...
+    
     async function analyzePdf(file) {
+        console.log('Analyzing PDF:', file.name);
         try {
             const API_URL = 'https://resumaker-api.onrender.com';
             const formData = new FormData();
@@ -68,18 +69,17 @@ export default function UploadPDF({ onUploadSuccess }) {
         
             console.log('Starting file upload:', file.name);
             
-            const response = await fetch(`${API_URL}/api/ai/analyze`, {  // Changed endpoint path
+            // Update endpoint to match backend route
+            const response = await fetch(`${API_URL}/api/ai/analyze`, {
                 method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                },
                 body: formData,
+                // Removed Accept header which isn't necessary and might cause issues
             });
             
             console.log('Response status:', response.status);
             
             if (!response.ok) {
-              // Try to parse error response if possible
+                // Try to parse error response if possible
                 try {
                     const errorData = await response.json();
                     throw new Error(errorData.error || `Server error: ${response.status}`);
@@ -101,15 +101,15 @@ export default function UploadPDF({ onUploadSuccess }) {
             try {
                 const analysisData = JSON.parse(text);
                 return analysisData;
-                } catch (jsonError) {
+            } catch (jsonError) {
                 console.error('JSON parse error:', jsonError);
                 console.error('Raw response:', text);
                 throw new Error('Invalid response format from server');
-                }
-            } catch (error) {
-                console.error('Error in analyzePdf:', error);
-                throw error;
             }
+        } catch (error) {
+            console.error('Error in analyzePdf:', error);
+            throw error;
+        }
     }
     
     return (
