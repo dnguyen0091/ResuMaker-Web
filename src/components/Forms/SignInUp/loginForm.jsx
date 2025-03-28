@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import eyeClosedIcon from '../../../assets/Icons/eyeClosed.svg';
 import eyeOpenIcon from '../../../assets/Icons/eyeOpen.svg';
+// import { useAuth } from '../../../context/AuthContext';
 import './forms.css';
 
 export default function LoginForm() {
@@ -10,14 +11,65 @@ export default function LoginForm() {
     email: '',
     password: ''
   });
+  // const { loginUser } = useAuth();
 
   // UI state
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMsg,setSuccessMsg] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-
   const [loginStep,setLoginStep] = useState('login');
+  const [passwordValidation, setPasswordValidation] = useState({
+    isValid: false,
+    length: false,
+    hasUppercase: false,
+    hasLowercase: false,
+    hasNumber: false,
+    hasSpecialChar: false,
+    matchesConfirm: false
+  });
+  
+  // Add a state to track the new password
+  const [newPasswordData, setNewPasswordData] = useState({
+    newPassword: '',
+    confirmNewPassword: ''
+  });
+
+  const handleNewPasswordChange = (e) => {
+    const { id, value } = e.target;
+    setNewPasswordData(prevData => ({
+      ...prevData,
+      [id === 'newPassword' ? 'newPassword' : 'confirmNewPassword']: value
+    }));
+  };
+
+
+  useEffect(() => {
+    if (loginStep === 'newPassword') {
+      const { newPassword, confirmNewPassword } = newPasswordData;
+      
+      // Password validation criteria
+      const length = newPassword.length >= 8;
+      const hasUppercase = /[A-Z]/.test(newPassword);
+      const hasLowercase = /[a-z]/.test(newPassword);
+      const hasNumber = /[0-9]/.test(newPassword);
+      const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(newPassword);
+      const matchesConfirm = newPassword === confirmNewPassword && newPassword !== '';
+      
+      // Check if all criteria are met
+      const isValid = length && hasUppercase && hasLowercase && hasNumber && hasSpecialChar;
+      
+      setPasswordValidation({
+        isValid,
+        length,
+        hasUppercase,
+        hasLowercase,
+        hasNumber,
+        hasSpecialChar,
+        matchesConfirm
+      });
+    }
+  }, [newPasswordData.newPassword, newPasswordData.confirmNewPassword, loginStep]);
   
   // Handle input changes
   const handleChange = (e) => {
@@ -69,16 +121,9 @@ export default function LoginForm() {
       // Handle successful login
       console.log('Login successful', data);
       
-      // Store auth token
-      if (data.token) {
-        localStorage.setItem('token', data.token);
-        
-        // Store user data if needed
-        if (data.user) {
-          localStorage.setItem('user', JSON.stringify(data.user));
-        }
-        
-      }
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
+      console.log("User saved:", data.user);
       navigate('/resume-builder');
     } catch (err) {
       setError(err.message || 'Login failed. Please try again.');
@@ -99,7 +144,7 @@ export default function LoginForm() {
         const API_URL = 'https://resumaker-api.onrender.com';
         
         // Send request to initiate password reset
-        const response = await fetch(`${API_URL}/api/auth/forgot-password`, {
+        const response = await fetch(`${API_URL}/api/auth/forgotPassword`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -137,38 +182,39 @@ export default function LoginForm() {
       setIsLoading(true);
       setError('');
       
-      try {
-        const API_URL = 'https://resumaker-api.onrender.com';
-        const resetCode = document.getElementById('resetCode').value;
-        const tempToken = localStorage.getItem('tempResetToken');
+      setLoginStep('newPassword');
+      // try {
+      //   const API_URL = 'https://resumaker-api.onrender.com';
+      //   const resetCode = document.getElementById('resetCode').value;
+      //   const tempToken = localStorage.getItem('tempResetToken');
         
-        // Verify reset code
-        const response = await fetch(`${API_URL}/api/auth/verify-reset-code`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(tempToken && { 'Authorization': `Bearer ${tempToken}` }),
-          },
-          body: JSON.stringify({
-            email: formData.email,
-            resetCode: resetCode
-          })
-        });
+      //   // Verify reset code
+      //   const response = await fetch(`${API_URL}/api/auth/verify-reset-code`, {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //       ...(tempToken && { 'Authorization': `Bearer ${tempToken}` }),
+      //     },
+      //     body: JSON.stringify({
+      //       email: formData.email,
+      //       resetCode: resetCode
+      //     })
+      //   });
         
-        const data = await response.json();
+      //   const data = await response.json();
         
-        if (!response.ok) {
-          throw new Error(data.message || 'Invalid reset code');
-        }
+      //   if (!response.ok) {
+      //     throw new Error(data.message || 'Invalid reset code');
+      //   }
         
-        setSuccessMsg('Code verified. Please set a new password.');
-        setLoginStep('newPassword');
+      //   setSuccessMsg('Code verified. Please set a new password.');
+      //   setLoginStep('newPassword');
         
-      } catch (err) {
-        setError(err.message || 'Code verification failed. Please try again.');
-      } finally {
-        setIsLoading(false);
-      }
+      // } catch (err) {
+      //   setError(err.message || 'Code verification failed. Please try again.');
+      // } finally {
+      //   setIsLoading(false);
+      // }
     };
     
     // Handle password reset
@@ -177,60 +223,56 @@ export default function LoginForm() {
       setIsLoading(true);
       setError('');
       
-      const newPassword = document.getElementById('newPassword').value;
-      const confirmPassword = document.getElementById('confirmNewPassword').value;
+      // Client-side validation
+      if (!passwordValidation.isValid) {
+        setError('Please ensure your password meets all requirements');
+        setIsLoading(false);
+        return;
+      }
       
-      // Validate passwords match
-      if (newPassword !== confirmPassword) {
+      if (!passwordValidation.matchesConfirm) {
         setError('Passwords do not match');
         setIsLoading(false);
         return;
       }
       
-      // Basic password validation - you could add more robust validation here
-      if (newPassword.length < 8) {
-        setError('Password must be at least 8 characters long');
-        setIsLoading(false);
-        return;
-      }
-      
-      try {
-        const API_URL = 'https://resumaker-api.onrender.com';
-        const tempToken = localStorage.getItem('tempResetToken');
+      // try {
+      //   const API_URL = 'https://resumaker-api.onrender.com';
+      //   const tempToken = localStorage.getItem('tempResetToken');
         
-        // Reset password
-        const response = await fetch(`${API_URL}/api/auth/reset-password`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(tempToken && { 'Authorization': `Bearer ${tempToken}` }),
-          },
-          body: JSON.stringify({
-            email: formData.email,
-            password: newPassword
-          })
-        });
+      //   // Reset password
+      //   const response = await fetch(`${API_URL}/api/auth/reset-password`, {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //       ...(tempToken && { 'Authorization': `Bearer ${tempToken}` }),
+      //     },
+      //     body: JSON.stringify({
+      //       email: formData.email,
+      //       password: newPassword
+      //     })
+      //   });
         
-        const data = await response.json();
+      //   const data = await response.json();
         
-        if (!response.ok) {
-          throw new Error(data.message || 'Password reset failed');
-        }
+      //   if (!response.ok) {
+      //     throw new Error(data.message || 'Password reset failed');
+      //   }
         
-        // Clean up
-        localStorage.removeItem('tempResetToken');
+      //   // Clean up
+      //   localStorage.removeItem('tempResetToken');
         
-        setSuccessMsg('Password has been reset successfully!');
-        setLoginStep('login');
+      //   setSuccessMsg('Password has been reset successfully!');
+      //   setLoginStep('login');
         
-        // Clear password fields
-        setFormData({...formData, password: ''});
+      //   // Clear password fields
+      //   setFormData({...formData, password: ''});
         
-      } catch (err) {
-        setError(err.message || 'Password reset failed. Please try again.');
-      } finally {
-        setIsLoading(false);
-      }
+      // } catch (err) {
+      //   setError(err.message || 'Password reset failed. Please try again.');
+      // } finally {
+      //   setIsLoading(false);
+      // }
     };
 
 
@@ -395,63 +437,99 @@ export default function LoginForm() {
         </div>
       )}
 
-      {loginStep === 'newPassword' && (
-        <div className="verification-container">
-          <h2 className="form-title">Set New Password</h2>
-          
-          {/* Error message */}
-          {error && <div className="form-error">{error}</div>}
-          
-          {/* Success message */}
-          {successMsg && <div className="form-success">{successMsg}</div>}
-          
-          <form onSubmit={handleResetPassword} className="verification-form">
-            <div className="form-group">
-              <label className="form-label" htmlFor="newPassword">New Password</label>
-              <div className="password-input-container">
-                <input 
-                  type={showPassword ? "text" : "password"} 
-                  id="newPassword" 
-                  className="form-input"
-                  placeholder="Enter new password"
-                  required
-                />
-                <button 
-                  type="button"
-                  className="password-toggle-button"
-                  onClick={() => setShowPassword(prev => !prev)}
-                >
-                  {showPassword ? (
-                    <img className="password-icon hide-password" src={eyeOpenIcon} alt="Hide password" />
-                  ) : (
-                    <img className="password-icon show-password" src={eyeClosedIcon} alt="Show password" />
-                  )}
-                </button>
-              </div>
-            </div>
-            
-            <div className="form-group">
-              <label className="form-label" htmlFor="confirmNewPassword">Confirm Password</label>
-              <div className="password-input-container">
-                <input 
-                  type={showPassword ? "text" : "password"} 
-                  id="confirmNewPassword" 
-                  className="form-input"
-                  placeholder="Confirm new password"
-                  required
-                />
-              </div>
-            </div>
-            <button 
-              type="submit" 
-              className="form-button"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Resetting...' : 'Reset Password'}
-            </button>
-          </form>
+{loginStep === 'newPassword' && (
+  <div className="verification-container">
+    <h2 className="form-title">Set New Password</h2>
+    
+    {/* Error message */}
+    {error && <div className="form-error">{error}</div>}
+    
+    {/* Success message */}
+    {successMsg && <div className="form-success">{successMsg}</div>}
+    
+    <form onSubmit={handleResetPassword} className="verification-form">
+      <div className="form-group">
+        <label className="form-label" htmlFor="newPassword">New Password</label>
+        <div className="password-input-container">
+          <input 
+            type={showPassword ? "text" : "password"} 
+            id="newPassword" 
+            className="form-input"
+            placeholder="Enter new password"
+            value={newPasswordData.newPassword}
+            onChange={handleNewPasswordChange}
+            required
+          />
+          <button 
+            type="button"
+            className="password-toggle-button"
+            onClick={() => setShowPassword(prev => !prev)}
+          >
+            {showPassword ? (
+              <img className="password-icon hide-password" src={eyeOpenIcon} alt="Hide password" />
+            ) : (
+              <img className="password-icon show-password" src={eyeClosedIcon} alt="Show password" />
+            )}
+          </button>
         </div>
-      )}
+        
+        {/* Password requirements checklist */}
+        {newPasswordData.newPassword && (
+          <div className="password-requirements">
+            <p className="requirements-title" id="reqTitle">Password must have:</p>
+            <ul className="requirements-list">
+              <li className={passwordValidation.length ? 'met' : 'not-met'}>
+                At least 8 characters
+              </li>
+              <li className={passwordValidation.hasUppercase ? 'met' : 'not-met'}>
+                At least one uppercase letter
+              </li>
+              <li className={passwordValidation.hasLowercase ? 'met' : 'not-met'}>
+                At least one lowercase letter
+              </li>
+              <li className={passwordValidation.hasNumber ? 'met' : 'not-met'}>
+                At least one number
+              </li>
+              <li className={passwordValidation.hasSpecialChar ? 'met' : 'not-met'}>
+                At least one special character
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+      
+      <div className="form-group">
+        <label className="form-label" htmlFor="confirmNewPassword">Confirm Password</label>
+        <div className="password-input-container">
+          <input 
+            type={showPassword ? "text" : "password"} 
+            id="confirmNewPassword" 
+            className="form-input"
+            placeholder="Confirm new password"
+            value={newPasswordData.confirmNewPassword}
+            onChange={handleNewPasswordChange}
+            required
+          />
+        </div>
+        
+        {/* Password match indicator */}
+        {newPasswordData.confirmNewPassword && (
+          <div className={`password-match ${passwordValidation.matchesConfirm ? 'matched' : 'not-matched'}`}>
+            {passwordValidation.matchesConfirm ? 'Passwords match ✓' : 'Passwords do not match ✗'}
+          </div>
+        )}
+      </div>
+      
+      <button 
+        type="submit" 
+        className="form-button"
+        disabled={isLoading || !passwordValidation.isValid || !passwordValidation.matchesConfirm}
+      >
+        {isLoading ? 'Resetting...' : 'Reset Password'}
+      </button>
+    </form>
+  </div>
+)}
       {(loginStep==='verifyAccount') && (
         <div className="verification-container">
         <h2 className="form-title">Verify</h2>
