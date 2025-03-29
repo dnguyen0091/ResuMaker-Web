@@ -72,9 +72,71 @@ export default function DisplayPreview({ resumeData = {} }) {
   };
   
   const savePDF = async () => {
-    //Connect to the backend to save the pdf
     console.log("Save PDF Clicked");
+  
+    if (!resumeData) return;
+    setIsGenerating(true);
+  
+    try {
+      // Get user first
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user || !user.email) {
+        throw new Error('User email not found. Please log in again.');
+      }
+  
+      const API_URL = 'https://resumaker-api.onrender.com';
+      const blob = await pdf(<MyPDFDocument resumeData={resumeData} />).toBlob();
+      const fileName = personalInfo?.name 
+        ? `${personalInfo.name.replace(/\s+/g, '_')}_Resume.pdf`
+        : `MyResume.pdf`;
+      
+      // Create a File object from the blob
+      const file = new File([blob], fileName, { type: 'application/pdf' });
+      
+      // Create FormData to send the file - order can be important
+      const formData = new FormData();
+      formData.append('resume', file); // This should match the field name expected by multer
+      formData.append('email', user.email);
+      
+      console.log("FormData entries:");
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + (pair[0] === 'file' ? '[File object]' : pair[1]));
+      }
+      
+      // Send the request to the server - use the correct endpoint path
+      const response = await fetch(`${API_URL}/api/resume/upload-resume`, {
+        method: 'POST',
+        body: formData,
+        // No headers for multipart/form-data
+      });
+      
+      if (!response.ok) {
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || `Failed to save resume: ${response.status}`);
+        } else {
+          const text = await response.text();
+          console.error("Server response:", text);
+          throw new Error(`Server error (${response.status}). Check console for details.`);
+        }
+      }
+      
+      const data = await response.json();
+      console.log('Resume saved successfully:', data);
+      
+      // Show success message to user
+      console.log('Resume saved successfully!');
+      
+    } catch (error) {
+      console.error("Error saving resume:", error);
+      console.log(`Failed to save resume: ${error.message}`);
+    } finally {
+      setIsGenerating(false);
+    }
   };
+
+
   // Check if there's any personal info data to display
   const hasPersonalInfo = personalInfo && Object.values(personalInfo).some(value => value && value.trim && value.trim() !== '');
   
