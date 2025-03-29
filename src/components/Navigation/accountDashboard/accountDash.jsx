@@ -78,17 +78,22 @@ export default function AccountDashboard() {
     
     const handleViewResume = async (resumeId) => {
         try {
-            // Get user email from localStorage
+            // Get user from localStorage
             console.log("Fetching resume with ID:", resumeId);
             const user = JSON.parse(localStorage.getItem('user'));
-            const userEmail = user?.email || localStorage.getItem('userEmail');
             
-            if (!userEmail) throw new Error("User email not found");
+            if (!user || !user._id) throw new Error("User not found. Please log in again.");
             
             const API_URL = 'https://resumaker-api.onrender.com';
             
-            // Updated endpoint to match your server's route structure
-            const response = await fetch(`${API_URL}/api/resume/view/${resumeId}`, {
+            console.log(`Requesting: ${API_URL}/api/resume/view/${user._id}/${resumeId}`);
+            
+            // Find the resume object to get the filename
+            const resumeObj = resumes.find(r => r._id === resumeId);
+            const fileName = resumeObj?.fileName || `resume_${resumeId}.pdf`;
+            
+            // Updated endpoint path to match the new structure that takes userId and resumeId
+            const response = await fetch(`${API_URL}/api/resume/view/${user._id}/${resumeId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -96,29 +101,41 @@ export default function AccountDashboard() {
             });
             
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || "Failed to fetch resume");
+                const contentType = response.headers.get('content-type');
+                
+                if (contentType && contentType.includes('application/json')) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || "Failed to fetch resume");
+                } else {
+                    const errorText = await response.text();
+                    throw new Error(`Server error: ${response.status}. ${errorText || ''}`);
+                }
             }
             
-            // Process the JSON response
-            const resumeData = await response.json();
-            console.log("Resume data:", resumeData);
+            // Convert response to blob
+            const blob = await response.blob();
             
-            // Check if filePath exists in the response
-            if (!resumeData.filePath) {
-                throw new Error("Resume file path not found");
+            if (blob.size === 0) {
+                throw new Error("Received empty file from server");
             }
             
-            // Construct the full URL to the PDF file
-            const token = localStorage.getItem('token');
-            // Include the token as a query parameter for authentication
-            const pdfUrl = `${API_URL}${resumeData.filePath}?token=${token}`;
-            console.log("Opening PDF URL:", pdfUrl);
+            // Create download link
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
             
-            // Open the PDF in a new tab
-            window.open(pdfUrl, '_blank');
+            // Clean up
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+            
         } catch (error) {
-            console.error("Error viewing resume:", error);
+            console.error("Error downloading resume:", error);
+            alert(`Error: ${error.message}`);
         }
     };
 
