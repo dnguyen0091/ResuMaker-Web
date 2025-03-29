@@ -158,6 +158,15 @@ export default function AccountDashboard() {
 }
 
 function SavedResumeModal({ onClose, resumes, isLoading, error, handleViewResume }) {
+    // Sort resumes by uploadedAt date, most recent first
+    const sortedResumes = [...resumes].sort((a, b) => {
+        // If either doesn't have uploadedAt, fall back to _id comparison
+        if (!a.uploadedAt || !b.uploadedAt) {
+            return b._id?.localeCompare(a._id) || 0;
+        }
+        return new Date(b.uploadedAt) - new Date(a.uploadedAt);
+    });
+    
     return(
         <>
             <div className="overlay" onClick={onClose}></div>
@@ -172,7 +181,7 @@ function SavedResumeModal({ onClose, resumes, isLoading, error, handleViewResume
                     {isLoading && <p>Loading...</p>}
                     {error && <p className="error">{error}</p>}
                     {resumes && resumes.length > 0 ? (
-                        resumes.map((resume) => (
+                        sortedResumes.map((resume) => (
                             <ResumeCard 
                                 key={resume._id} 
                                 resume={resume}
@@ -191,9 +200,11 @@ function SavedResumeModal({ onClose, resumes, isLoading, error, handleViewResume
 function ResumeCard({ resume, onView }) {
     return(
         <div className="resumeCard">
-            <h2>{resume.fileName || "Untitled Resume"}</h2>
+            <h2 title={resume.fileName || "Untitled Resume"}>
+                {resume.fileName || "Untitled Resume"}
+            </h2>
             <p>Created: {resume.uploadedAt ? new Date(resume.uploadedAt).toLocaleDateString() : "Unknown"}</p>
             <button onClick={() => onView(resume._id)}>View</button>
         </div>
     );
-    }
+}
