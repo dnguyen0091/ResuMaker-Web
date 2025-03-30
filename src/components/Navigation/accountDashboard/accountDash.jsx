@@ -135,7 +135,6 @@ export default function AccountDashboard() {
             
         } catch (error) {
             console.error("Error downloading resume:", error);
-            alert(`Error: ${error.message}`);
         }
     };
 
