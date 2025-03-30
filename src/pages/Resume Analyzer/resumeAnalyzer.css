@@ -1,6 +1,7 @@
 .resume-analyzer
 {
     animation: fadeIn 0.5s ease;
+    overflow:auto;
 }
 
 
@@ -12,7 +13,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    min-height: 80vh; /* Use 80vh to account for header and nav */
+    min-height: 90vh; /* Use 80vh to account for header and nav */
     width: 100%;
     margin-top:0;
 }
@@ -130,6 +131,8 @@ input[type="file"] {
     justify-content: center;
     width: 100%;
     padding: 2rem;
+    height: calc(100vh - 150px); /* Adjust based on your header/navbar height */
+    overflow: visible; /* Change from auto to visible */
 }
   
 .results-container {
@@ -189,7 +192,9 @@ input[type="file"] {
     border-radius: 8px;
     padding: 1.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
   
 .overall-score {
@@ -260,6 +265,7 @@ input[type="file"] {
   
 .suggestions {
     margin: 2rem 0;
+    
   }
   
 .suggestions h3 {
@@ -338,4 +344,85 @@ input[type="file"] {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+
+/* Updated scrollbar styling with dark theme colors */
+.resume-analyzer {
+    animation: fadeIn 0.5s ease;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-dark) var(--card-dark);
+}
+
+.resume-analyzer::-webkit-scrollbar {
+    width: 4px;
+}
+
+.resume-analyzer::-webkit-scrollbar-track {
+    background: var(--user-bubble-dark); /* Using darker color for track */
+    border-radius: 4px;
+}
+
+.resume-analyzer::-webkit-scrollbar-thumb {
+    background: var(--accent-dark); /* Using accent color from theme */
+    border-radius: 4px;
+    opacity: 0.8;
+}
+
+.resume-analyzer::-webkit-scrollbar-thumb:hover {
+    background: rgba(25, 195, 125, 0.9); /* Slightly lighter on hover */
+    opacity: 1;
+}
+
+/* Add matching styling for PDF container */
+.pdf-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.pdf-container::-webkit-scrollbar-track {
+    background: var(--user-bubble-dark);
+    border-radius: 4px;
+}
+
+.pdf-container::-webkit-scrollbar-thumb {
+    background: var(--accent-dark);
+    border-radius: 4px;
+    opacity: 0.8;
+}
+
+.pdf-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(25, 195, 125, 0.9);
+    opacity: 1;
+}
+
+.pdf-container {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-dark) var(--user-bubble-dark);
+}
+
+/* Style for suggestions area if needed */
+.suggestions::-webkit-scrollbar {
+    width: 4px;
+}
+
+.suggestions::-webkit-scrollbar-track {
+    background: var(--user-bubble-dark);
+    border-radius: 4px;
+}
+
+.suggestions::-webkit-scrollbar-thumb {
+    background: var(--accent-dark);
+    border-radius: 4px;
+    opacity: 0.8;
+}
+
+.suggestions::-webkit-scrollbar-thumb:hover {
+    background: rgba(25, 195, 125, 0.9);
+    opacity: 1;
+}
+
+.suggestions {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-dark) var(--user-bubble-dark);
 }
