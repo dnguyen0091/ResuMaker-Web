@@ -209,35 +209,44 @@ export default function RegisterForm() {
   };
   
   const handleResendCode = async () => {
+    e.preventDefault();
     setIsLoading(true);
     setError('');
-    setSuccessMsg('');
     
     try {
       const API_URL = 'https://resumaker-api.onrender.com';
+      const verificationCode = document.getElementById('verificationCode').value;
+      const tempToken = localStorage.getItem('tempRegToken');
       
-      // Send request to resend verification code
-      const response = await fetch(`${API_URL}/api/auth/resend-verification`, {
+      // Connect to endpoint to verify user
+      const email=localStorage.getItem('email');
+      console.log(email + " " + verificationCode);
+      const response = await fetch(`${API_URL}/api/auth/verifyEmail`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          // Include temp token if available
+          ...(tempToken && { 'Authorization': `Bearer ${tempToken}` }),
         },
         body: JSON.stringify({
-          email: formData.email
+          email: email,
+          verificationCode: verificationCode
         })
       });
       
       const data = await response.json();
       
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to resend verification code');
+        throw new Error(data.message || 'Verification failed');
       }
       
-      setSuccessMsg('A new verification code has been sent to your email.');
+      // Verification successful
+      localStorage.removeItem('tempRegToken'); // Clean up temp token
+      localStorage.removeItem('email');
       
+      navigate('/resume-builder');
     } catch (err) {
-      setError(err.message || 'Failed to resend verification code. Please try again.');
-      console.error('Resend verification error:', err);
+      setError(err.message || 'Verification failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -402,7 +411,7 @@ export default function RegisterForm() {
           {/* Success message */}
           {successMsg && <div className="form-success">{successMsg}</div>}
           
-          <p className="verification-message">We've sent a verification code to <strong>{formData.email}</strong>.</p>
+          <p className="verification-message">We've sent a verification code to <strong>{localStorage.email}</strong>.</p>
           
           <form onSubmit={handleVerificationSubmit} className="verification-form">
             <div className="form-group">
