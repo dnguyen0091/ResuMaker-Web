@@ -1,10 +1,10 @@
 
-import { Document, Page, Text, View } from '@react-pdf/renderer';
 import React from 'react';
+import { Document, Page, Text, View, Image } from '@react-pdf/renderer';
 import {
-  CustomStyles,
+  ResumeContentStyles,
   EducationExperienceStyles,
-  ResumeContentStyles
+  CustomStyles
 } from '../../Styles/pdfStyles';
 
 // import PinIcon from '../../assets/Icons/pin.png';
@@ -15,13 +15,13 @@ import {
 const pdfDocument = ({ resumeData }) => {
   const { personalInfo, education = [], experience = [], customSections = [] } = resumeData;
 
-  const renderContactItem = (separator, value) => {
-    if (!value) return null;
-    
-    return (
-      <Text style={ResumeContentStyles.contactItem}>{value}</Text>
-    );
-  };
+  const renderContactItem = (icon, value) =>
+    value ? (
+      <View style={ResumeContentStyles.contactItem}>
+        <Image src={icon} style={ResumeContentStyles.contactIcon} />
+        <Text>{value}</Text>
+      </View>
+    ) : null;
 
   const renderBulletPoints = (points = []) =>
     points.filter(p => p && p.trim()).map((point, index) => (
@@ -57,16 +57,21 @@ const pdfDocument = ({ resumeData }) => {
             {personalInfo?.name || 'Your Name'}
           </Text>
           <View style={ResumeContentStyles.resumeContactInfo}>
-            <Text style={ResumeContentStyles.contactText}>
-              {[
-                personalInfo?.location,
-                personalInfo?.email, 
-                personalInfo?.phone,
-                personalInfo?.linkedin
-              ]
-              .filter(Boolean) // Remove empty/null values
-              .join(" | ")} {/* Join with pipe separator */}
-            </Text>
+            {[
+              personalInfo?.location,
+              personalInfo?.email,
+              personalInfo?.phone,
+              personalInfo?.linkedin
+            ]
+              .filter(Boolean)
+              .map((item, index) => (
+                <View key={index} style={ResumeContentStyles.contactItemGroup}>
+                  {index > 0 && (
+                    <Text style={ResumeContentStyles.contactSeparator}>|</Text>
+                  )}
+                  <Text style={ResumeContentStyles.contactText}>{item}</Text>
+                </View>
+              ))}
           </View>
         </View>
 

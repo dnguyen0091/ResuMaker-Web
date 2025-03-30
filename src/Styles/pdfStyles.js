@@ -30,14 +30,20 @@ export const ResumeContentStyles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    gap: 8,
-    fontSize: 14,
+    marginTop: 4,
   },
-  contactItem: {
+  contactItemGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 8,
+  },
+  contactSeparator: {
+    marginHorizontal: 24,
+    color: '#888',
     fontSize: 14,
+  },
+  contactText: {
+    fontSize: 14,
+    color: '#333',
   },
   contactIcon: {
     width: 24,

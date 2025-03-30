@@ -49,10 +49,7 @@
   }
 
 
-.sectionTitleInput
-{
-  background-color: transparent;
-}
+  /* Add to your resumeBuilder.css or the appropriate CSS file */
 
 /* Editable section header */
 .editableSectionHeader {
@@ -99,13 +96,13 @@
     border-radius: 0.5rem;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); */
     transition: all 0.2s ease;
   }
   
-  .customSectionContainer:hover {
+  /* .customSectionContainer:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  }
+  } */
   
   /* Custom entry styling to match experience entry */
   .customEntry {

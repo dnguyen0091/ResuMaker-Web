@@ -1,15 +1,15 @@
 // import html2canvas from 'html2canvas';
 // import jsPDF from 'jspdf';
-import { pdf } from '@react-pdf/renderer';
 import React, { useEffect, useRef, useState } from 'react';
 import downloadIcon from '../../assets/Icons/download.svg';
 import saveIcon from '../../assets/Icons/save.svg';
-import MyPDFDocument from './pdfDocument';
 import './Preview/Custom.css';
 import './Preview/EducationExperience.css';
 import './Preview/preview.css';
 import './Preview/resumeContent.css';
 import './resumeBuilder.css';
+import { pdf } from '@react-pdf/renderer';
+import MyPDFDocument from './pdfDocument';
 
 /**
  * A PDF preview component that updates in real-time as the user inputs data
@@ -72,71 +72,9 @@ export default function DisplayPreview({ resumeData = {} }) {
   };
   
   const savePDF = async () => {
+    //Connect to the backend to save the pdf
     console.log("Save PDF Clicked");
-  
-    if (!resumeData) return;
-    setIsGenerating(true);
-  
-    try {
-      // Get user first
-      const user = JSON.parse(localStorage.getItem('user'));
-      if (!user || !user.email) {
-        throw new Error('User email not found. Please log in again.');
-      }
-  
-      const API_URL = 'https://resumaker-api.onrender.com';
-      const blob = await pdf(<MyPDFDocument resumeData={resumeData} />).toBlob();
-      const fileName = personalInfo?.name 
-        ? `${personalInfo.name.replace(/\s+/g, '_')}_Resume.pdf`
-        : `MyResume.pdf`;
-      
-      // Create a File object from the blob
-      const file = new File([blob], fileName, { type: 'application/pdf' });
-      
-      // Create FormData to send the file - order can be important
-      const formData = new FormData();
-      formData.append('resume', file); // This should match the field name expected by multer
-      formData.append('email', user.email);
-      
-      console.log("FormData entries:");
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ': ' + (pair[0] === 'file' ? '[File object]' : pair[1]));
-      }
-      
-      // Send the request to the server - use the correct endpoint path
-      const response = await fetch(`${API_URL}/api/resume/upload-resume`, {
-        method: 'POST',
-        body: formData,
-        // No headers for multipart/form-data
-      });
-      
-      if (!response.ok) {
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || `Failed to save resume: ${response.status}`);
-        } else {
-          const text = await response.text();
-          console.error("Server response:", text);
-          throw new Error(`Server error (${response.status}). Check console for details.`);
-        }
-      }
-      
-      const data = await response.json();
-      console.log('Resume saved successfully:', data);
-      
-      // Show success message to user
-      console.log('Resume saved successfully!');
-      
-    } catch (error) {
-      console.error("Error saving resume:", error);
-      console.log(`Failed to save resume: ${error.message}`);
-    } finally {
-      setIsGenerating(false);
-    }
   };
-
-
   // Check if there's any personal info data to display
   const hasPersonalInfo = personalInfo && Object.values(personalInfo).some(value => value && value.trim && value.trim() !== '');
   
@@ -171,6 +109,25 @@ export default function DisplayPreview({ resumeData = {} }) {
     return <p className="description-text">{description}</p>;
   };
 
+  const getPageBreakMarkers = () => {
+    const breaks = [];
+    const fullPageHeight = 842;
+    const topPadding = 43;
+    const bottomPadding = 43;
+    const usablePageHeight = fullPageHeight - topPadding - bottomPadding;
+  
+    const scale = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--preview-scale')) || 1;
+    const scaledUsableHeight = usablePageHeight * scale;
+  
+    const totalHeight = contentHeight * scale;
+  
+    const numBreaks = Math.floor(totalHeight / scaledUsableHeight);
+    for (let i = 1; i <= numBreaks; i++) {
+      breaks.push(i * scaledUsableHeight / scale);
+    }
+    return breaks;
+  };  
+
   return (
     <div className="preview-container">
       {/* Header with download button */}
@@ -185,7 +142,16 @@ export default function DisplayPreview({ resumeData = {} }) {
       {/* The preview area - this will contain the resume content */}
       <div className="preview-area">
         <div className="resume-wrapper">
-          <div className="paper-size-indicator"></div>
+        {hasPersonalInfo &&
+          getPageBreakMarkers().map((top, index) => (
+            <div
+              key={index}
+              className="page-break-indicator"
+              style={{ top: `${top}px` }}
+            />
+          ))}
+
+          {/* <div className="paper-size-indicator"></div> */}
           {/* This div will be converted to PDF - referenced by resumeRef */}
           <div className="resume-document a4-paper" ref={resumeRef}>
             {/* Personal Info Section - Rendered if we have data */}
@@ -194,37 +160,30 @@ export default function DisplayPreview({ resumeData = {} }) {
                 <h1 className="resume-name">{personalInfo.name || 'Your Name'}</h1>
                 
                 <div className="resume-contact-info">
-                  {personalInfo.location && (
-                    <div className="contact-item">
-                      <span className="contact-icon"></span>
-                      <span>{personalInfo.location}</span>
-                    </div>
-                  )}
-                  
-                  {personalInfo.email && (
-                    <div className="contact-item">
-                      <span className="contact-icon">|</span>
-                      <span>{personalInfo.email}</span>
-                    </div>
-                  )}
-                  
-                  {personalInfo.phone && (
-                    <div className="contact-item">
-                      <span className="contact-icon">|</span>
-                      <span>{personalInfo.phone}</span>
-                    </div>
-                  )}
-                  
-                  {personalInfo.linkedin && (
-                    <div className="contact-item">
-                      <span className="contact-icon">|</span>
-                      <span>{personalInfo.linkedin}</span>
-                    </div>
-                  )}
+                  {[
+                    personalInfo.location,
+                    personalInfo.email,
+                    personalInfo.phone,
+                    personalInfo.linkedin
+                  ]
+                    .filter(Boolean)
+                    .map((item, index, array) => (
+                      <React.Fragment key={index}>
+                        {index > 0 && <span className="contact-separator">|</span>}
+                        <span className="contact-item">{item}</span>
+                      </React.Fragment>
+                    ))}
                 </div>
               </div>
             ) : (
-              <div className="resume-placeholder">
+              <div
+                className="resume-placeholder"
+                style={{
+                  height: `${getPageBreakMarkers()[0] || 770}px`,
+                  padding: '2rem 1.5rem',
+                  boxSizing: 'border-box',
+                }}
+              >
                 <p>Your resume will appear here</p>
                 <p className="placeholder-hint">Content from the builder will be displayed in real-time</p>
               </div>
