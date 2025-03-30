@@ -9,7 +9,6 @@ export default function HomePage() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const handleLoginClick = () => {
-    alert("REMEMBER TO DIRECT GET STARTED TO LOGIN PAGE");
     setShowModal(true);
   };
 
