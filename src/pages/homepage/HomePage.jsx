@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import logo from '../../assets/Resumaker.png';
 import ConnectUser from "../../components/Forms/SignInUp/connectUser";
 import "./HomePage.css";
 
 export default function HomePage() {
   
-  const navigate = useNavigate();
+  
   const [showModal, setShowModal] = useState(false);
   const handleLoginClick = () => {
     setShowModal(true);
@@ -30,7 +30,7 @@ export default function HomePage() {
           {/* Buttons */}
           <div className="button-container">
             
-            <button className="button get-started" onClick={() => navigate("/resume-builder")}>Get Started</button>
+            <button className="button get-started" onClick={handleLoginClick}>Get Started</button>
             <div className="login-section">
               <span className="login-text">Already a user? </span>
               <button className="button login-button" onClick={handleLoginClick}>Login</button>
