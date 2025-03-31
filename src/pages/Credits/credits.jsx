@@ -1,5 +1,6 @@
 import andrew from "../../assets/Devs/andrew.jpg";
 import david from "../../assets/Devs/david.jpg";
+import davidVoice from "../../assets/Devs/David.mp3";
 import james from "../../assets/Devs/james.jpg";
 import juniper from "../../assets/Devs/juniper.jpg";
 import lucas from "../../assets/Devs/lucas.png";
@@ -16,7 +17,8 @@ export default function Credits()
         if (clickedClass.includes("David")) {
             console.log("David was clicked");
             // Perform David-specific logic
-            // const easterEggAudio=new Audio("../../assets/EasterEgg/david.mp3");    
+            const easterEggAudio=new Audio(davidVoice);
+            easterEggAudio.play();
         } else if (clickedClass.includes("Lucas")) {
             console.log("Lucas was clicked");
             // Perform Lucas-specific logic
