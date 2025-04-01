@@ -1,8 +1,13 @@
 import andrew from "../../assets/Devs/andrew.jpg";
+import andrewVoice from "../../assets/Devs/andrew.mp3";
 import david from "../../assets/Devs/david.jpg";
 import davidVoice from "../../assets/Devs/David.mp3";
 import james from "../../assets/Devs/james.jpg";
+import jamesVoice from "../../assets/Devs/james.mp3";
 import juniper from "../../assets/Devs/juniper.jpg";
+import loganVoice from "../../assets/Devs/logan.mp3";
+import logan from "../../assets/Devs/logan.png";
+import lucasVoice from "../../assets/Devs/lucas.mp3";
 import lucas from "../../assets/Devs/lucas.png";
 import profile from "../../assets/Icons/profile.svg";
 import "../../index.css";
@@ -22,7 +27,8 @@ export default function Credits()
         } else if (clickedClass.includes("Lucas")) {
             console.log("Lucas was clicked");
             // Perform Lucas-specific logic
-            // const easterEggAudio=new Audio("../../assets/EasterEgg/lucas.mp3");
+            const easterEggAudio=new Audio(lucasVoice);
+            easterEggAudio.play();
         } else if (clickedClass.includes("Juniper")) {
             console.log("Juniper was clicked");
             // Perform Juniper-specific logic
@@ -30,7 +36,8 @@ export default function Credits()
         } else if (clickedClass.includes("James")) {
             console.log("James was clicked");
             // Perform James-specific logic
-            // const easterEggAudio=new Audio("../../assets/EasterEgg/james.mp3"); 
+            const easterEggAudio=new Audio(jamesVoice);
+            easterEggAudio.play();
         } else if (clickedClass.includes("Prasaad")) {
             console.log("Prasaad was clicked");
             // Perform Prasaad-specific logic
@@ -38,11 +45,13 @@ export default function Credits()
         } else if (clickedClass.includes("Andrew")) {
             console.log("Andrew was clicked");
             // Perform Andrew-specific logic
-            // const easterEggAudio=new Audio("../../assets/EasterEgg/andrew.mp3"); 
+            const easterEggAudio=new Audio(andrewVoice);
+            easterEggAudio.play();
         } else if (clickedClass.includes("Logan")) {
             console.log("Logan was clicked");
             // Perform Logan-specific logic
-            // const easterEggAudio=new Audio("../../assets/EasterEgg/logan.mp3"); 
+            const easterEggAudio=new Audio(loganVoice);
+            easterEggAudio.play();
         } else {
             console.log("Unknown developer clicked");
         }
@@ -90,7 +99,7 @@ export default function Credits()
                         <p>AI API Developer</p>
                     </div>
                     <div className="developer">
-                        <img src={profile} alt="Logan Russell" onClick={handleClick} className="Logan" />
+                        <img src={logan} alt="Logan Russell" onClick={handleClick} className="Logan" />
                         <h2>Logan Russell</h2>
                         <p>Front-End Developer</p>
                     </div>
