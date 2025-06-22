@@ -115,12 +115,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Meet the developers behind ResuMaker:
 
-- **Andrew** - [Profile](src/assets/Devs/andrew.jpg)
-- **David** - [Profile](src/assets/Devs/david.jpg)
-- **James** - [Profile](src/assets/Devs/james.jpg)
-- **Juniper** - [Profile](src/assets/Devs/juniper.jpg)
-- **Logan** - [Profile](src/assets/Devs/logan.png)
-- **Lucas** - [Profile](src/assets/Devs/lucas.png)
+- **David Nguyen** - *Front-End* - [dnguyen0091](https://github.com/yourusername)
+- **Logan Russell** - *Front-End* - [logansrussell](https://github.com/logansrussell)
+- **Lucas Santana** - *API* -[Lucass0104](https://github.com/Lucass0104)
+- **Andrew Terry** - *API* 
+- **Juniper Desanto** - *API* - [JuniperDeSanto](https://github.com/JuniperDeSanto)
+- **Prasaad Joshi** - *API* - [prasaadjg](https://github.com/prasaadjg)
+- **James Barnett** - *API/Database* - [shadowstorm37](https://github.com/shadowstorm37)
 
 ## 📞 Support
 
